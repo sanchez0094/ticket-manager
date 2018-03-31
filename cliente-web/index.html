@@ -27,11 +27,14 @@
         <input type="text" id="direccion" />
     </div>
     <div>
-        <label for="mail">E-mail:</label>
-        <input type="email" id="mail" />
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" />
     </div>
     <div>
         <input type="button" id="submit" value="Crear" />
+    </div>
+    <div>
+        <input type="button" id="list" value="Listar" />
     </div>
 </form>
 </div>
@@ -40,10 +43,49 @@
             document.getElementById('submit').addEventListener('click',function(event){
             nuevocliente();
             });
+            document.getElementById('list').addEventListener('click',function(event){
+              listarClientes();
+            })
           });
 
           function nuevocliente(){
             var form = document.getElementById('formularioCliente');
             console.log(form);
+            const cliente = {
+              nombre_cliente: form.nombre_cliente.value,
+              apellido_cliente: form.apellido_cliente.value,
+              nombre_local : form.nombre_local.value,
+              cuit:form.cuit.value,
+              telefono:form.telefono.value,
+              direccion:form.direccion.value,
+              email:form.email.value
+            };
+            fetch('http://localhost:3000/api/clientes', {
+              method: 'POST',
+              body: JSON.stringify(cliente),
+              headers: {'content-type': 'application/json'}
+            }).then(function(response){
+              if(response.status != 200)
+                throw new Error("Error registrando cliente");
+              else
+                alert("Se cargo");
+            }).catch(function(error){
+              alert(error.message);
+            });
+          }
+
+          function listarClientes(){
+            fetch('http://localhost:3000/api/clientes', {
+              method: 'GET',
+              headers: {'content-type': 'application/json'}
+            }).then(function(response){
+              if(response.status != 200)
+                throw new Error("Error registrando cliente");
+              return response.json();
+            }).then(function(response){
+              console.log(response);
+            }).catch(function(error){
+              alert(error.message);
+            });
           }
 </script>
