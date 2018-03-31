@@ -1,0 +1,14 @@
+{
+  "name": "estado_pedido",
+  "forceId":true,
+  "properties": {
+    "id_estado": {
+      "type": "number",
+      "id": true
+    },
+    "nombre_estado": {
+      "type": "string",
+      "required":true
+    }
+ }
+}

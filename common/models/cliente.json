@@ -1,0 +1,29 @@
+{
+  "name": "cliente",
+  "forceId":true,
+  "properties": {
+    "id_cliente": {
+      "type": "number",
+      "id": true
+    },
+    "nombre_cliente": {
+      "type": "string",
+      "required":true
+    },
+    "apellido_cliente":{
+      "type":"string"
+    },
+    "cuit":{
+      "type":"string"
+    },
+    "telefono":{
+      "type":"string"
+    },
+    "direccion":{
+      "type":"string"
+    },
+    "email":{
+      "type":"string"
+    }
+  }
+}

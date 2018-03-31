@@ -1,0 +1,28 @@
+{
+  "name": "empleado",
+  "forceId":true,
+
+  "properties": {
+
+    "id_empleado": {
+      "type": "number",
+      "id": true
+    },
+    "nombre_empleado": {
+      "type": "string",
+      "required":true
+    },
+    "cuil":{
+      "type":"string"
+    },
+    "telefono":{
+      "type":"string"
+  },
+    "direccion":{
+      "type":"string"
+  },
+  "email":{
+    "type":"string"
+  }
+ }
+}

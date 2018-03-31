@@ -1,0 +1,62 @@
+{
+  "name": "pedido",
+  "forceId":true,
+  "properties": {
+    "id_pedido": {
+      "type": "number",
+      "id": true
+    },
+    "fecha_pedido": {
+      "type": "date",
+      "default":"now"
+    },
+    "fecha_entrega":{
+      "type":"date"
+    },
+    "detalle_pedido":{
+      "type":"string",
+      "required": "true"
+    },
+    "monto":{
+      "type":"number"
+    },
+    "pago_efectuado":{
+      "type":"boolean",
+      "default":false
+    },
+    "cuenta_corriente":{
+      "type":"boolean",
+      "default":false
+    },
+    "seña":{
+      "type":"number"
+    }
+  },
+  "relations":{
+    "negocio_entrega":{
+      "type": "belongsTo",
+      "model": "negocio",
+      "foreignKey": "id_negocio_entrega"
+    },
+    "cliente":{
+      "type": "belongsTo",
+      "model": "cliente",
+      "foreignKey": "id_cliente"
+    },
+    "prioridad":{
+      "type": "belongsTo",
+      "model": "prioridad_pedido",
+      "foreignKey": "id_prioridad"
+    },
+    "estado":{
+      "type": "belongsTo",
+      "model": "estado_pedido",
+      "foreignKey": "id_estado"
+    },
+    "empleado":{
+      "type": "belongsTo",
+      "model": "empleado",
+      "foreignKey": "id_empleado"
+    }
+  }
+}

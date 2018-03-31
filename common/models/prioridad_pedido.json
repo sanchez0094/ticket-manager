@@ -1,0 +1,14 @@
+{
+  "name": "prioridad_pedido",
+  "forceId":true,
+  "properties": {
+    "id_prioridad": {
+      "type": "number",
+      "id": true
+    },
+    "nombre_prioridad": {
+      "type": "string",
+      "required":true
+  }
+ }
+}

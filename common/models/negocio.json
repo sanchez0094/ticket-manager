@@ -1,0 +1,23 @@
+{
+  "name": "negocio",
+  "forceId":true,
+  "properties": {
+    "id_negocio": {
+      "type": "number",
+      "id": true
+    },
+    "nombre_negocio": {
+      "type": "string",
+      "required":true
+    },
+    "telefono":{
+      "type":"string"
+    },
+    "direccion":{
+      "type":"string"
+  },
+  "localidad":{
+    "type":"string"
+  }
+ }
+}
