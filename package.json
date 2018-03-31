@@ -7,7 +7,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "start": "node .",
+    "start": "./node_modules/.bin/nodemon .",
     "posttest": "npm run lint && nsp check"
   },
   "dependencies": {
@@ -21,9 +21,10 @@
     "serve-favicon": "^2.0.1",
     "strong-error-handler": "^2.0.0"
   },
-  "devDependencies": {
+  "devDependencies": { 
     "eslint": "^3.17.1",
     "eslint-config-loopback": "^8.0.0",
+    "nodemon": "^1.17.2",
     "nsp": "^2.1.0"
   },
   "repository": {
