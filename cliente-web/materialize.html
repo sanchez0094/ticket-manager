@@ -95,19 +95,6 @@
      <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
      <script type="text/javascript">
 
-       const clientes = [{
-         id: 1,
-         nombre_cliente: "Juan Manuel",
-         apellido_cliente: "Sanchez"
-       },{
-         id: 2,
-         nombre_cliente: "Lucia Belen",
-         apellido_cliente: "Sanchez"
-       },{
-         id: 3,
-         nombre_cliente: "Alejandra",
-         apellido_cliente: " Majul"
-       }];
 
        const empleados = [{
          id: 1,
@@ -144,15 +131,25 @@
        }
 
        function listarClientes(){
-         let listado =_.reduce(clientes, function(result, cliente, key) {
-           let name = cliente.nombre_cliente + ' ' + cliente.apellido_cliente;
-           let code = ' (cod.' + cliente.id + ')';
-            result[name + code] = null;
-            return result;
-          }, {});
-
-         var elem = document.querySelector('.autocomplete');
-         var instance = M.Autocomplete.init(elem, {data: listado});
+           fetch('http://localhost:3000/api/clientes', {
+             method: 'GET',
+             headers: {'content-type': 'application/json'}
+           }).then(function(response){
+             if(response.status != 200)
+               throw new Error("Error registrando cliente");
+             return response.json();
+           }).then(function(clientes){
+             let listado =_.reduce(clientes, function(result, cliente, key) {
+               let name = cliente.nombre_cliente + ' ' + cliente.apellido_cliente;
+               let code = ' (cod.' + cliente.id_cliente + ')';
+                result[name + code] = null;
+                return result;
+              }, {});
+             var elem = document.querySelector('.autocomplete');
+             var instance = M.Autocomplete.init(elem, {data: listado});
+           }).catch(function(error){
+             alert(error.message);
+           });
        }
 
        function nuevoCliente(){
