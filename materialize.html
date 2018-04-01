@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Ticket Manager</title>
+
+    <meta name="theme-color" content="#263238">
+    <!-- Compiled and minified CSS -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+     <!-- Compiled and minified JavaScript -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+     <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script> -->
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="light-blue lighten-1" role="navigation">
+      <div class="nav-wrapper container">
+        <a id="logo-container" href="#" class="brand-logo">Ticket Manager</a>
+      </div>
+    </nav>
+
+     <div class="row" style="margin-top:20px">
+       <div class="col s2"></div>
+
+       <form class="col s8" id="form-pedido">
+         <div class="row">
+           <div class="input-field col s11">
+             <input type="text" id="autocomplete-cliente" class="autocomplete">
+             <label for="autocomplete-input">Cliente</label>
+           </div>
+           <div class="input-field col s1">
+             <a href="#!" class="btn-floating btn-medium light-blue lighten-1" id="show-form-cliente">
+               <i class="material-icons" id="add-btn">add</i>
+               <i class="material-icons" id="remove-btn" style="display: none">remove</i>
+             </a>
+           </div>
+         </div>
+
+         <div class="row" id="form-cliente" style="display: none">
+           <div class="input-field col s6">
+             <input placeholder="Placeholder" id="nombre_cliente" type="text" class="validate">
+             <label for="first_name">First Name</label>
+           </div>
+
+           <div class="input-field col s6">
+             <input id="apellido_cliente" type="text" class="validate">
+             <label for="last_name">Last Name</label>
+           </div>
+         </div>
+
+         <div class="row">
+           <div class="input-field col s12">
+             <select id="combo-empleados"></select>
+             <label>Empleado</label>
+           </div>
+
+           <div class="input-field col s6">
+             <input placeholder="Placeholder" id="first_name" type="text" class="validate">
+             <label for="first_name">First Name</label>
+           </div>
+
+           <div class="input-field col s6">
+             <input id="last_name" type="text" class="validate">
+             <label for="last_name">Last Name</label>
+           </div>
+         </div>
+         <div class="row">
+           <div class="input-field col s12">
+             <input disabled value="I am not editable" id="disabled" type="text" class="validate">
+             <label for="disabled">Disabled</label>
+           </div>
+         </div>
+         <div class="row">
+           <div class="input-field col s12">
+             <input id="password" type="password" class="validate">
+             <label for="password">Password</label>
+           </div>
+         </div>
+         <div class="row">
+           <div class="input-field col s12">
+             <input id="email" type="email" class="validate">
+             <label for="email">Email</label>
+           </div>
+         </div>
+       </form>
+       <div class="col s2"></div>
+
+     </div>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.core.min.js"></script>
+     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+     <script type="text/javascript">
+
+       const clientes = [{
+         id: 1,
+         nombre_cliente: "Juan Manuel",
+         apellido_cliente: "Sanchez"
+       },{
+         id: 2,
+         nombre_cliente: "Lucia Belen",
+         apellido_cliente: "Sanchez"
+       },{
+         id: 3,
+         nombre_cliente: "Alejandra",
+         apellido_cliente: " Majul"
+       }];
+
+       const empleados = [{
+         id: 1,
+         nombre_empleado: "Leandro",
+         apellido_empleado: "Barle"
+       },{
+         id: 2,
+         nombre_empleado: "Amparo",
+         apellido_empleado: "Velazquez"
+       },{
+         id: 3,
+         nombre_empleado: "Ezequiel",
+         apellido_empleado: "Molina"
+       }];
+
+       $(document).ready(function(){
+         listarEmpleados();
+         listarClientes();
+         $("#show-form-cliente").on('click', function(){
+           $("#form-cliente").toggle();
+           $("#add-btn").toggle();
+           $("#remove-btn").toggle();
+         });
+       });
+
+       function listarEmpleados(){
+         $("#combo-empleados").append("<option>Seleccione uno</option>");
+         _.each(empleados, function(e){
+           let html = `<option value="${e.id}">${e.nombre_empleado} ${e.apellido_empleado}</option>`;
+           $("#combo-empleados").append(html);
+         });
+         var elem = document.querySelector('select');
+         var instance = M.FormSelect.init(elem);
+       }
+
+       function listarClientes(){
+         let listado =_.reduce(clientes, function(result, cliente, key) {
+           let name = cliente.nombre_cliente + ' ' + cliente.apellido_cliente;
+           let code = ' (cod.' + cliente.id + ')';
+            result[name + code] = null;
+            return result;
+          }, {});
+
+         var elem = document.querySelector('.autocomplete');
+         var instance = M.Autocomplete.init(elem, {data: listado});
+       }
+
+       function nuevoCliente(){
+
+       }
+     </script>
+  </body>
+</html>
