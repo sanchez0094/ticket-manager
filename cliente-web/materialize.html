@@ -43,32 +43,42 @@
 
          <div class="row" id="form-cliente" style="display: none">
            <div class="input-field col s6">
-             <input placeholder="Placeholder" id="nombre_cliente" type="text" class="validate">
-             <label for="first_name">First Name</label>
+             <input  id="nombre_cliente" type="text" class="validate">
+             <label for="nombre_cliente">Nombre</label>
+           </div>
+           <div class="input-field col s6">
+             <input id="apellido_cliente" type="text" class="validate">
+             <label for="apellido_cliente">Apellido</label>
            </div>
 
            <div class="input-field col s6">
-             <input id="apellido_cliente" type="text" class="validate">
-             <label for="last_name">Last Name</label>
+             <input  id="cuit" type="text" class="validate">
+             <label for="cuit">Cuit</label>
            </div>
-         </div>
+             <div class="input-field col s6">
+               <input  id="telefono" type="text" class="validate">
+               <label for="telefono">Telefono</label>
+             </div>
+             <div class="input-field col s6">
+               <input  id="direccion" type="text" class="validate">
+               <label for="direccion">Direccion</label>
+             </div>
+             <div class="input-field col s6">
+               <input  id="email" type="text" class="validate">
+               <label for="email">E-mail</label>
+             </div>
+             </div>
 
          <div class="row">
            <div class="input-field col s12">
              <select id="combo-empleados"></select>
              <label>Empleado</label>
            </div>
-
-           <div class="input-field col s6">
-             <input placeholder="Placeholder" id="first_name" type="text" class="validate">
-             <label for="first_name">First Name</label>
-           </div>
-
-           <div class="input-field col s6">
-             <input id="last_name" type="text" class="validate">
-             <label for="last_name">Last Name</label>
-           </div>
-         </div>
+           <div class="row">
+             <div class="input-field col s12">
+               <select id="combo-negocio"></select>
+               <label>Negocio</label>
+             </div>
          <div class="row">
            <div class="input-field col s12">
              <input disabled value="I am not editable" id="disabled" type="text" class="validate">
@@ -93,12 +103,13 @@
      </div>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.core.min.js"></script>
      <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="scripts.js"></script>
      <script type="text/javascript">
-
 
        $(document).ready(function(){
          listarEmpleados();
          listarClientes();
+
          $("#show-form-cliente").on('click', function(){
            $("#form-cliente").toggle();
            $("#add-btn").toggle();
@@ -106,53 +117,6 @@
          });
        });
 
-       function listarClientes(){
-           fetch('http://localhost:3000/api/clientes', {
-             method: 'GET',
-             headers: {'content-type': 'application/json'}
-           }).then(function(response){
-             if(response.status != 200)
-               throw new Error("Error registrando cliente");
-             return response.json();
-           }).then(function(clientes){
-             let listado =_.reduce(clientes, function(result, cliente, key) {
-               let name = cliente.nombre_cliente + ' ' + cliente.apellido_cliente;
-               let code = ' (cod.' + cliente.id_cliente + ')';
-                result[name + code] = null;
-                return result;
-              }, {});
-             var elem = document.querySelector('.autocomplete');
-             var instance = M.Autocomplete.init(elem, {data: listado});
-           }).catch(function(error){
-             alert(error.message);
-           });
-       }
-
-
-
-       function listarEmpleados(){
-           fetch('http://localhost:3000/api/empleados', {
-             method: 'GET',
-             headers: {'content-type': 'application/json'}
-           }).then(function(response){
-             if(response.status != 200)
-               throw new Error("Error registrando cliente");
-             return response.json();
-           }).then(function(empleados){
-             $("#combo-empleados").append("<option>Seleccione uno</option>");
-             _.each(empleados, function(e){
-               let html = `<option value="${e.id}">${e.nombre_empleado} ${e.apellido_empleado}</option>`;
-               $("#combo-empleados").append(html);
-             });
-             var elem = document.querySelector('select');
-             var instance = M.FormSelect.init(elem);
-           }).catch(function(error){
-             alert(error.message);
-           });
-       }
-       function nuevoCliente(){
-
-       }
      </script>
   </body>
 </html>
