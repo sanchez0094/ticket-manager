@@ -43,7 +43,9 @@ function listarClientes() {
       id_cliente: "1",
     }];
     let listado = _.reduce(clientes, function(result, cliente, key) {
-      let name = cliente.nombre_cliente + ' ' + cliente.apellido_cliente;
+      let name = cliente.nombre_cliente + ' ' + cliente.apellido_cliente + ' ' +
+                 cliente.cuit + ' ' + cliente.telefono + ' ' +
+                  cliente.direccion + ' ' + cliente.email;
       let code = ' (cod.' + cliente.id_cliente + ')';
       result[name + code] = null;
       return result;
