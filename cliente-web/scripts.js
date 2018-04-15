@@ -1,4 +1,4 @@
-/* global _,$ , fetch, document, M, alert  */
+/* global _,$ , fetch, document, M, alert, options  */
 'use strict';
 
 function mostrarCliente() {
@@ -15,14 +15,14 @@ function mostrarCliente() {
       throw new Error('Error registrando cliente');
     return response.json();
   }).then(function(cliente) {
-    // Cargar la info del cliente en los inputs
-    // aca deberia ir en lugar de JUAN o SANCHEZ cliente.nombre_cliente o lo que corresponda
-    $('#nombre_cliente').val('JUAN');
-    $('#apellido_cliente').val('SANCHEZ');
-
-    // Esto hace que se actualizen los inputs para que se vean bien con el
-    // framework materialize
+    $('#nombre_cliente').val(cliente.nombre_cliente);
+    $('#apellido_cliente').val(cliente.apellido_cliente);
+    $('#cuit').val(cliente.cuit);
+    $('#telefono').val(cliente.telefono);
+    $('#direccion').val(cliente.direccion);
+    $('#email').val(cliente.email);
     M.updateTextFields();
+    console.log('tendria q verse');
   }).catch(function(error) {
     alert(error.message);
   });
@@ -37,15 +37,8 @@ function listarClientes() {
       throw new Error('Error registrando cliente');
     return response.json();
   }).then(function(clientes) {
-    clientes = [{
-      nombre_cliente: "juan",
-      apellido_cliente: "sanchez",
-      id_cliente: "1",
-    }];
     let listado = _.reduce(clientes, function(result, cliente, key) {
-      let name = cliente.nombre_cliente + ' ' + cliente.apellido_cliente + ' ' +
-                 cliente.cuit + ' ' + cliente.telefono + ' ' +
-                  cliente.direccion + ' ' + cliente.email;
+      let name = cliente.nombre_cliente + ' ' + cliente.apellido_cliente;
       let code = ' (cod.' + cliente.id_cliente + ')';
       result[name + code] = null;
       return result;
@@ -80,7 +73,60 @@ function listarEmpleados() {
     alert(error.message);
   });
 }
+function listarNegocios() {
+  fetch('http://localhost:3000/api/negocios', {
+    method: 'GET',
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error registrando cliente');
+    return response.json();
+  }).then(function(negocios) {
+    $('#combo-negocios').append('<option>Seleccione uno</option>');
+    _.each(negocios, function(n) {
+      let html = `<option value="${n.id}">
+        ${n.nombre_negocio}</option>`;
+      $('#combo-negocios').append(html);
+    });
+    var elem = document.querySelector('select');
+    var instance = M.FormSelect.init(elem);
+  }).catch(function(error) {
+    alert(error.message);
+  });
+}
 
-function nuevoCliente() {
+/* function nuevoCliente() {
+  var form = document.getElementById('formularioCliente');
+  console.log(form);
+  const cliente = {
+    nombre_cliente: form.nombre_cliente.value,
+    apellido_cliente: form.apellido_cliente.value,
+    nombre_local: form.nombre_local.value,
+    cuit: form.cuit.value,
+    telefono: form.telefono.value,
+    direccion: form.direccion.value,
+    email: form.email.value
+  };
+  fetch('http://localhost:3000/api/clientes', {
+    method: 'POST',
+    body: JSON.stringify(cliente),
+    headers: {'content-type': 'application/json'}
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error registrando cliente');
+    else
+      alert('Se cargo');
+  }).catch(function(error) {
+    alert(error.message);
+  });
+}*/
+function fecha() {
+  var elem = document.querySelector('.datepicker');
+  var instance = M.Datepicker.init(elem, options);
 
+  $(document).ready(function() {
+    $('.datepicker').datepicker();
+  });
+
+  instance.open();
 }
