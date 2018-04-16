@@ -27,7 +27,7 @@
   <div class="row" style="margin-top:20px">
     <div class="col s2"></div>
 
-    <form class="col s8" id="form-pedido">
+    <form class="col s11" id="form-pedido">
       <div class="row">
         <div class="input-field col s11">
           <input type="text" id="autocomplete-cliente" class="autocomplete">
@@ -41,13 +41,13 @@
         </div>
       </div>
 
-      <div class="row" id="form-cliente" style="display: none">
+      <div class="row" id="form-cliente"  style="display: none">
         <div class="input-field col s6">
-          <input  id="nombre_cliente" type="text" class="validate">
+          <input  id="nombre_cliente" name="nombre_cliente" type="text" class="validate">
           <label for="nombre_cliente">Nombre</label>
         </div>
         <div class="input-field col s6">
-          <input id="apellido_cliente" type="text" class="validate">
+          <input id="apellido_cliente" name="apellido_cliente" type="text" class="validate">
           <label for="apellido_cliente">Apellido</label>
         </div>
 
@@ -69,6 +69,7 @@
         </div>
       </div>
 
+
       <div class="row">
         <div class="input-field col s12">
           <select id="combo-empleados"></select>
@@ -89,18 +90,18 @@
       </div>
 
       <div class = "input-field col s6" >
-        <input id= "fecha_entrega" type="text" class= "datepicker">
+        <input id= "fecha_entrega" type="text" class="datepicker">
         <label for= "fecha_entrega">Fecha Entrega</label>
       </div>
       <p>
         <label>
-          <input type="checkbox" class="filled-in" checked="checked" />
+          <input id="pago_efectuado" type="checkbox" class="filled-in"  />
           <span>Pago Efectuado</span>
         </label>
       </p>
       <p>
         <label>
-          <input type="checkbox" class="filled-in" checked="checked" />
+          <input id="cuenta_corriente" type="checkbox" class="filled-in"  />
           <span>Cuenta Corriente</span>
         </label>
       </p>
@@ -122,16 +123,18 @@
       listarClientes();
       listarNegocios();
 
+      M.Datepicker.init($("#fecha_entrega"), {});
+
+      M.Datepicker.init( $("#fecha_pedido"), {});
+
+
       $("#show-form-cliente").on('click', function(){
         $("#form-cliente").toggle();
         $("#add-btn").toggle();
         $("#remove-btn").toggle();
       });
     });
-      $("#fecha_pedido").on('click', function(){
 
-    fecha();
-  });
 
 
     </script>

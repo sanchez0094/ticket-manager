@@ -1,12 +1,15 @@
 /* global _,$ , fetch, document, M, alert, options  */
 'use strict';
-
-function mostrarCliente() {
+function obtenerIDCLiente() {
   var selectedClient = $(document.querySelector('.autocomplete')).val();
   var comboVal = selectedClient.split(' ');
   var userId = comboVal[(comboVal.length - 1)]
     .replace('(cod.', '')
     .replace(')', '');
+  return userId;
+}
+function mostrarCliente() {
+  var userId = obtenerIDCLiente();
   fetch('http://localhost:3000/api/clientes/' + userId, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
@@ -44,8 +47,6 @@ function listarClientes() {
       return result;
     }, {});
     var elem = document.querySelector('.autocomplete');
-    var instance = M.Autocomplete.getInstance(elem);
-
     var instance = M.Autocomplete.init(elem, {data: listado});
   }).catch(function(error) {
     alert(error.message);
@@ -67,7 +68,7 @@ function listarEmpleados() {
         ${e.nombre_empleado} ${e.apellido_empleado}</option>`;
       $('#combo-empleados').append(html);
     });
-    var elem = document.querySelector('select');
+    var elem =  $('#combo-empleados');
     var instance = M.FormSelect.init(elem);
   }).catch(function(error) {
     alert(error.message);
@@ -88,29 +89,30 @@ function listarNegocios() {
         ${n.nombre_negocio}</option>`;
       $('#combo-negocios').append(html);
     });
-    var elem = document.querySelector('select');
+    // var elem = document.querySelector('select');
+    var elem = $('#combo-negocios');
     var instance = M.FormSelect.init(elem);
   }).catch(function(error) {
     alert(error.message);
   });
 }
 
-/* function nuevoCliente() {
-  var form = document.getElementById('formularioCliente');
+function nuevoCliente() {
+  var form = document.getElementById('form-pedido');
   console.log(form);
   const cliente = {
-    nombre_cliente: form.nombre_cliente.value,
-    apellido_cliente: form.apellido_cliente.value,
-    nombre_local: form.nombre_local.value,
-    cuit: form.cuit.value,
-    telefono: form.telefono.value,
-    direccion: form.direccion.value,
-    email: form.email.value
+
+    'nombre_cliente': form.nombre_cliente.value,
+    'apellido_cliente': form.apellido_cliente.value,
+    'cuit': form.cuit.value,
+    'telefono': form.telefono.value,
+    'direccion': form.direccion.value,
+    'email': form.email.value,
   };
   fetch('http://localhost:3000/api/clientes', {
     method: 'POST',
     body: JSON.stringify(cliente),
-    headers: {'content-type': 'application/json'}
+    headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
       throw new Error('Error registrando cliente');
@@ -119,14 +121,29 @@ function listarNegocios() {
   }).catch(function(error) {
     alert(error.message);
   });
-}*/
-function fecha() {
-  var elem = document.querySelector('.datepicker');
-  var instance = M.Datepicker.init(elem, options);
-
-  $(document).ready(function() {
-    $('.datepicker').datepicker();
+}
+function modificarCliente() {
+  var form = document.getElementById('form-pedido');
+  console.log(form);
+  const cliente = {
+    'id_cliente': obtenerIDCLiente(),
+    'nombre_cliente': form.nombre_cliente.value,
+    'apellido_cliente': form.apellido_cliente.value,
+    'cuit': form.cuit.value,
+    'telefono': form.telefono.value,
+    'direccion': form.direccion.value,
+    'email': form.email.value,
+  };
+  fetch('http://localhost:3000/api/clientes', {
+    method: 'PUT',
+    body: JSON.stringify(cliente),
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error registrando cliente');
+    else
+      alert('Se cargo');
+  }).catch(function(error) {
+    alert(error.message);
   });
-
-  instance.open();
 }
