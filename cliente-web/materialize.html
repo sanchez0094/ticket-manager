@@ -29,9 +29,18 @@
 
     <form class="col s11" id="form-pedido">
       <div class="row">
-        <div class="input-field col s11">
+        <div class="input-field col s9">
           <input type="text" id="autocomplete-cliente" class="autocomplete">
           <label for="autocomplete-input">Cliente</label>
+        </div>
+        <div class="input-field col s1">
+            <a class="btn-floating btn-medium waves-effect light-blue lighten-1">
+              <i class="material-icons" id="account_circle-btn">account_circle</i></a>
+          </a>
+        </div>
+        <div class="input-field col s1">
+              <a class="btn-floating btn-medium waves-effect light-blue lighten-1">
+                <i class="material-icons" id="mode_edit-btn">mode_edit</i></a>
         </div>
         <div class="input-field col s1">
           <a href="#!" class="btn-floating btn-medium light-blue lighten-1" id="show-form-cliente">
@@ -93,50 +102,110 @@
         <input id= "fecha_entrega" type="text" class="datepicker">
         <label for= "fecha_entrega">Fecha Entrega</label>
       </div>
-      <p>
-        <label>
-          <input id="pago_efectuado" type="checkbox" class="filled-in"  />
-          <span>Pago Efectuado</span>
-        </label>
-      </p>
-      <p>
-        <label>
-          <input id="cuenta_corriente" type="checkbox" class="filled-in"  />
-          <span>Cuenta Corriente</span>
-        </label>
-      </p>
-    </form>
-    <div class="col s2"></div>
+      <div class="row">
+          <div class="input-field col s12">
+            <textarea id="detalle_pedido" class="materialize-textarea" data-length="1000"></textarea>
+            <label for="textarea2">Detalle del Pedido</label>
+          </div>
+        </div>
+        <p>
+          <label>
+            <input id="pago_efectuado" type="checkbox" class="filled-in"  />
+            <span>Pago Efectuado</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input id="cuenta_corriente" type="checkbox" class="filled-in"  />
+            <span>Cuenta Corriente</span>
+          </label>
+        </p>
+        <span>Prioridad</span>
+        <p>
+          <label>
+            <input class="with-gap" name="group3" type="radio" checked />
+            <span>Alta</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input class="with-gap" name="group3" type="radio" checked />
+            <span>Media</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input class="with-gap" name="group3" type="radio" checked />
+            <span>Baja</span>
+          </label>
+        </p>
+      <div class="row">
+        <div class="input-field col s12">
+          <select id="combo-estado"></select>
+          <label>Estado</label>
+        </div>
+      </div>
+      <div class="row">
+       <div class="col s4">
+        Seña: $
+         <div class="input-field inline">
+           <input id="seña" type="number" class="validate">
+         </div>
+       </div>
+        <div class="col s4">
+         Monto: $
+          <div class="input-field inline">
+            <input id="seña" type="number" class="validate">
+          </div>
+        </div>
+         <div class="col s4">
+          Saldo Restante: $
+           <div class="input-field inline">
+             <input id="saldoRestante" type="number" class="validate">
+           </div>
+           </div>
+          </div>
+          <a class="waves-effect waves-light btn ">Cargar</a>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.core.min.js"></script>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    <script src="scripts.js"></script>
-    <script type="text/javascript">
+  </form>
+  <div class="col s2"></div>
 
-    $(document).ready(function(){
-      $("#add-btn").click(function(){
-        mostrarCliente();
-      });
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.core.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+  <script src="scripts.js"></script>
+  <script type="text/javascript">
 
-      listarEmpleados();
-      listarClientes();
-      listarNegocios();
-
-      M.Datepicker.init($("#fecha_entrega"), {});
-
-      M.Datepicker.init( $("#fecha_pedido"), {});
-
-
-      $("#show-form-cliente").on('click', function(){
-        $("#form-cliente").toggle();
-        $("#add-btn").toggle();
-        $("#remove-btn").toggle();
-      });
+  $(document).ready(function(){
+    $("#add-btn").click(function(){
+      mostrarCliente();
+    });
+    $("#account_circle-btn").click(function(){
+      nuevoCliente();
+    });
+    $("#mode_edit-btn").click(function(){
+      modificarCliente();
     });
 
+    listarEmpleados();
+    listarClientes();
+    listarNegocios();
+    listarEstado();
+
+    M.Datepicker.init($("#fecha_entrega"), {});
+
+    M.Datepicker.init( $("#fecha_pedido"), {});
 
 
-    </script>
-  </body>
-  </html>
+    $("#show-form-cliente").on('click', function(){
+      $("#form-cliente").toggle();
+      $("#add-btn").toggle();
+      $("#remove-btn").toggle();
+    });
+  });
+
+
+
+  </script>
+</body>
+</html>

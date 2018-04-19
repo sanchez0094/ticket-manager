@@ -147,3 +147,25 @@ function modificarCliente() {
     alert(error.message);
   });
 }
+function listarEstado() {
+  fetch('http://localhost:3000/api/estado_pedidos', {
+    method: 'GET',
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error registrando cliente');
+    return response.json();
+  }).then(function(estados) {
+    $('#combo-estado').append('<option>Seleccione uno</option>');
+    _.each(estados, function(p) {
+      let html = `<option value="${p.id_estado}">
+        ${p.nombre_estado}</option>`;
+      $('#combo-estado').append(html);
+    });
+    // var elem = document.querySelector('select');
+    var elem = $('#combo-estado');
+    var instance = M.FormSelect.init(elem);
+  }).catch(function(error) {
+    alert(error.message);
+  });
+}
