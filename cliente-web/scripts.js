@@ -18,6 +18,7 @@ function mostrarCliente() {
       throw new Error('Error registrando cliente');
     return response.json();
   }).then(function(cliente) {
+    $('#id_cliente').val(cliente.id_cliente);
     $('#nombre_cliente').val(cliente.nombre_cliente);
     $('#apellido_cliente').val(cliente.apellido_cliente);
     $('#cuit').val(cliente.cuit);
@@ -25,13 +26,12 @@ function mostrarCliente() {
     $('#direccion').val(cliente.direccion);
     $('#email').val(cliente.email);
     M.updateTextFields();
-    console.log('tendria q verse');
   }).catch(function(error) {
     alert(error.message);
   });
 }
 
-function listarClientes() {
+function listarClientes(callback) {
   fetch('http://localhost:3000/api/clientes', {
     method: 'GET',
     headers: {'content-type': 'application/json'},
@@ -48,8 +48,12 @@ function listarClientes() {
     }, {});
     var elem = document.querySelector('.autocomplete');
     var instance = M.Autocomplete.init(elem, {data: listado});
+    if (callback)
+      callback();
   }).catch(function(error) {
     alert(error.message);
+    if (callback)
+      callback(error);
   });
 }
 
@@ -97,7 +101,7 @@ function listarNegocios() {
   });
 }
 
-function nuevoCliente() {
+function nuevoCliente(callback) {
   var form = document.getElementById('form-pedido');
   console.log(form);
   const cliente = {
@@ -118,11 +122,13 @@ function nuevoCliente() {
       throw new Error('Error registrando cliente');
     else
       alert('Se cargo');
+    if (callback) callback();
   }).catch(function(error) {
     alert(error.message);
+    if (callback) callback(error);
   });
 }
-function modificarCliente() {
+function modificarCliente(callback) {
   var form = document.getElementById('form-pedido');
   console.log(form);
   const cliente = {
@@ -143,8 +149,10 @@ function modificarCliente() {
       throw new Error('Error registrando cliente');
     else
       alert('Se cargo');
+    if (callback) callback();
   }).catch(function(error) {
     alert(error.message);
+    if (callback) callback(error);
   });
 }
 function listarEstado() {
@@ -167,5 +175,19 @@ function listarEstado() {
     var instance = M.FormSelect.init(elem);
   }).catch(function(error) {
     alert(error.message);
+  });
+}
+
+function actualizarClientes() {
+  listarClientes(function(error) {
+    if (!error) {
+      $('#form-cliente').toggle();
+      $('#add-btn').toggle();
+      $('#remove-btn').toggle();
+      $(document.querySelector('.autocomplete')).val(
+     $('#nombre_cliente').val() + ' ' + $('#apellido_cliente').val() +
+      ' (cod.' + $('#id_cliente').val() + ')'
+      );
+    }
   });
 }

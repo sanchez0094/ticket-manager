@@ -27,7 +27,7 @@
   <div class="row" style="margin-top:20px">
     <div class="col s2"></div>
 
-    <form class="col s11" id="form-pedido">
+    <form class="col s8" id="form-pedido">
       <div class="row">
         <div class="input-field col s9">
           <input type="text" id="autocomplete-cliente" class="autocomplete">
@@ -51,6 +51,7 @@
       </div>
 
       <div class="row" id="form-cliente"  style="display: none">
+      <input type="hidden" id="id_cliente" name="id_cliente"/>
         <div class="input-field col s6">
           <input  id="nombre_cliente" name="nombre_cliente" type="text" class="validate">
           <label for="nombre_cliente">Nombre</label>
@@ -181,10 +182,14 @@
       mostrarCliente();
     });
     $("#account_circle-btn").click(function(){
-      nuevoCliente();
+      nuevoCliente(function(error){
+        actualizarClientes();
+      });
     });
     $("#mode_edit-btn").click(function(){
-      modificarCliente();
+      modificarCliente(function(error){
+        actualizarClientes();
+      });
     });
 
     listarEmpleados();
