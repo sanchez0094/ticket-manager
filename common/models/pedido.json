@@ -33,8 +33,9 @@
     },
   "saldo":{
     "type":"number"
-  },
-  "relations":{
+  }
+},
+  "relations": {
     "negocio_entrega":{
       "type": "belongsTo",
       "model": "negocio",
