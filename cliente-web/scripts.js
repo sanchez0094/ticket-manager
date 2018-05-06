@@ -186,8 +186,7 @@ function actualizarClientes() {
       $('#remove-btn').toggle();
       $(document.querySelector('.autocomplete')).val(
      $('#nombre_cliente').val() + ' ' + $('#apellido_cliente').val() +
-      ' (cod.' + $('#id_cliente').val() + ')'
-      );
+      ' (cod.' + $('#id_cliente').val() + ')');
     }
   });
 }

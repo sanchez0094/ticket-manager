@@ -30,7 +30,9 @@
     },
     "seña":{
       "type":"number"
-    }
+    },
+  "saldo":{
+    "type":"number"
   },
   "relations":{
     "negocio_entrega":{
