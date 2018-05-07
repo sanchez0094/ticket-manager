@@ -177,7 +177,6 @@ function listarEstado() {
     alert(error.message);
   });
 }
-
 function actualizarClientes() {
   listarClientes(function(error) {
     if (!error) {
@@ -190,7 +189,7 @@ function actualizarClientes() {
     }
   });
 }
-function nuevoPedido(callback) {
+/* function nuevoPedido(callback) {
   var form = document.getElementById('form-pedido');
   console.log(form);
   const pedido = {
@@ -208,7 +207,6 @@ function nuevoPedido(callback) {
     'id_estado':,
     'id_empleado': form.combo_empledo.selectedIndex,
 
-
   };
   fetch('http://localhost:3000/api/pedido', {
     method: 'POST',
@@ -224,4 +222,4 @@ function nuevoPedido(callback) {
     alert(error.message);
     if (callback) callback(error);
   });
-}
+} */

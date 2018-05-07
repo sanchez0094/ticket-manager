@@ -10,7 +10,7 @@
       "type": "date",
       "default":"now"
     },
-    "fecha_entrega":{
+    "fecha_entrega_estipulada":{
       "type":"date"
     },
     "detalle_pedido":{

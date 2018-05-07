@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>Ticket Manager</title>
+
+  <meta name="theme-color" content="#263238">
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script> -->
+  <!-- Fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="#" class="brand-logo">Ticket Manager</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="pedidos.html">Pedidos</a></li>
+        <li><a href="clientes.html">Clientes</a></li>
+        <li><a href="empleado.html">Empleados</a></li>
+        <li><a href="reportes.html">Reportes</a></li>
+        <li><a href="materialize.html">Nuevo Pedido</a></li>
+    </div>
+  </nav>
+
+  <div class="row" style="margin-top:20px">
+    <div class="col s2"></div>
+
+    <form class="col s8" id="form-cargaE">
+      <div class="row">
+        <div class="input-field col s9">
+          <input type="text" id="autocomplete-empleado" class="autocomplete">
+          <label for="autocomplete-input">Empleado</label>
+        </div>
+        <div class="input-field col s1">
+            <a class="btn-floating btn-medium waves-effect light-blue lighten-1">
+              <i class="material-icons" id="account_circle-btn">account_circle</i></a>
+          </a>
+        </div>
+        <div class="input-field col s1">
+              <a class="btn-floating btn-medium waves-effect light-blue lighten-1">
+                <i class="material-icons" id="mode_edit-btn">mode_edit</i></a>
+        </div>
+        <div class="input-field col s1">
+          <a href="#!" class="btn-floating btn-medium light-blue lighten-1" id="show-form-empleado">
+            <i class="material-icons" id="add-btn">add</i>
+            <i class="material-icons" id="remove-btn" style="display: none">remove</i>
+          </a>
+        </div>
+      </div>
+
+      <div class="row" id="form-empleado"  style="display: none">
+      <input type="hidden" id="id_empleado" name="id_empleado"/>
+        <div class="input-field col s6">
+          <input  id="nombre_empleado" name="nombre_empleado" type="text" class="validate">
+          <label for="nombre_empleado">Nombre</label>
+        </div>
+        <div class="input-field col s6">
+          <input id="apellido_empleado" name="apellido_empleado" type="text" class="validate">
+          <label for="apellido_empleado">Apellido</label>
+        </div>
+
+        <div class="input-field col s6">
+          <input  id="cuil" type="text" class="validate">
+          <label for="cuil">Cuil</label>
+        </div>
+        <div class="input-field col s6">
+          <input  id="telefono" type="text" class="validate">
+          <label for="telefono">Telefono</label>
+        </div>
+        <div class="input-field col s6">
+          <input  id="direccion" type="text" class="validate">
+          <label for="direccion">Direccion</label>
+        </div>
+        <div class="input-field col s6">
+          <input  id="email" type="text" class="validate">
+          <label for="email">E-mail</label>
+        </div>
+      </div>
+
+  </form>
+  <div class="col s2"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.core.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+  <script src="scripts.js"></script>
+  <script type="text/javascript">
+
+
+    listarEmpleados();
+    $("#show-form-empleado").on('click', function(){
+      $("#form-empleado").toggle();
+      $("#add-btn").toggle();
+      $("#remove-btn").toggle();
+    });
+  });
+
+
+
+  </script>
+</body>
+</html>
