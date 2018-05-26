@@ -36,10 +36,10 @@
   }
 },
   "relations": {
-    "negocio_entrega":{
+    "negocio":{
       "type": "belongsTo",
       "model": "negocio",
-      "foreignKey": "id_negocio_entrega"
+      "foreignKey": "id_negocio"
     },
     "cliente":{
       "type": "belongsTo",

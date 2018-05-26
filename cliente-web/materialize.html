@@ -10,8 +10,10 @@
   <meta name="theme-color" content="#263238">
   <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
   <!-- Compiled and minified JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
   <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script> -->
   <!-- Fonts -->
   <link href='https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en' rel='stylesheet' type='text/css'>
@@ -101,8 +103,8 @@
       </div>
 
       <div class = "input-field col s6">
-        <input id= "fecha_pedido" type="text" class="datepicker">
-        <label for= "fecha_pedido">Fecha Pedido</label>
+      <input id= "fecha_pedido" type="text" class="datepicker">
+      <label for= "fecha_pedido">Fecha Pedido</label>
       </div>
 
       <div class = "input-field col s6" >
@@ -130,19 +132,19 @@
         <span>Prioridad</span>
         <p>
           <label>
-            <input class="with-gap" name="group3" type="radio" checked />
+            <input id="alta" class="with-gap" name="group3" type="radio" checked />
             <span>Alta</span>
           </label>
         </p>
         <p>
           <label>
-            <input class="with-gap" name="group3" type="radio" checked />
+            <input id="media" class="with-gap" name="group3" type="radio" checked />
             <span>Media</span>
           </label>
         </p>
         <p>
           <label>
-            <input class="with-gap" name="group3" type="radio" checked />
+            <input id="baja" class="with-gap" name="group3" type="radio" checked />
             <span>Baja</span>
           </label>
         </p>
@@ -162,7 +164,7 @@
         <div class="col s4">
          Monto: $
           <div class="input-field inline">
-            <input id="seña" type="number" class="validate">
+            <input id="monto" type="number" class="validate">
           </div>
         </div>
          <div class="col s4">
@@ -172,7 +174,7 @@
            </div>
            </div>
           </div>
-          <a class="waves-effect waves-light btn ">Cargar</a>
+          <a id="btn_cargar" class="waves-effect waves-light btn ">Cargar</a>
 
 
   </form>
@@ -197,15 +199,21 @@
         actualizarClientes();
       });
     });
+  $("#btn_cargar").click(function(){
+      nuevoPedido();
+    });
+
 
     listarEmpleados();
     listarClientes();
     listarNegocios();
     listarEstado();
 
-    M.Datepicker.init($("#fecha_entrega"), {});
+    M.Datepicker.init($("#fecha_entrega"), {format: 'yyyy-mm-dd',
+       selectMonths: true});
 
-    M.Datepicker.init( $("#fecha_pedido"), {});
+    M.Datepicker.init( $("#fecha_pedido"), {format: 'yyyy-mm-dd',
+       selectMonths: true});
 
 
     $("#show-form-cliente").on('click', function(){
@@ -214,7 +222,6 @@
       $("#remove-btn").toggle();
     });
   });
-
 
 
   </script>

@@ -86,9 +86,9 @@ function listarNegocios() {
     if (response.status != 200)
       throw new Error('Error registrando cliente');
     return response.json();
-  }).then(function(negocios) {
+  }).then(function(negocio) {
     $('#combo_negocios').append('<option>Seleccione uno</option>');
-    _.each(negocios, function(n) {
+    _.each(negocio, function(n) {
       let html = `<option value="${n.id_negocio}">
         ${n.nombre_negocio}</option>`;
       $('#combo_negocios').append(html);
@@ -189,26 +189,44 @@ function actualizarClientes() {
     }
   });
 }
-/* function nuevoPedido(callback) {
+
+$('#fecha_entrega').change(function() {
+  var fecha = $(this).val();
+});
+
+function obtenerPrioridad() {
+  var form = document.getElementById('form-pedido');
+  if (form.alta.checked) {
+    return 5;
+  } else if (form.media.checked) {
+    return  7;
+  } else if (form.baja.checked) {
+    return 6;
+  }
+}
+function saldo() {
+  return $('#monto').val() -  $('#seña').val();
+}
+
+function nuevoPedido(callback) {
   var form = document.getElementById('form-pedido');
   console.log(form);
   const pedido = {
-    'fecha_pedido':,
-    'fecha_entrega':,
-    'detalle_pedido':,
-    'monto':,
-    'pago_efectuado':,
-    'cuenta_corriente':,
-    'seña':,
-    'saldo':,
-    'id_negocio_entrega': form.combo_negocios.selectedIndex,
-    'id_cliente':,
-    'id_preoridad':,
-    'id_estado':,
-    'id_empleado': form.combo_empledo.selectedIndex,
-
+    'fecha_pedido': form.fecha_pedido.value,
+    'fecha_entrega_estipulada': form.fecha_entrega.value,
+    'detalle_pedido': form.detalle_pedido.value,
+    'monto': form.monto.value,
+    'pago_efectuado': form.pago_efectuado.checked,
+    'cuenta_corriente': form.cuenta_corriente.checked,
+    'seña': form.seña.value,
+    'saldo': saldo(),
+    'id_prioridad': obtenerPrioridad(),
+    'id_negocio': form.combo_negocios.value,
+    'id_cliente': obtenerIDCLiente(),
+    'id_estado': form.combo_estado.value,
+    'id_empleado': form.combo_empleados.value,
   };
-  fetch('http://localhost:3000/api/pedido', {
+  fetch('http://localhost:3000/api/pedidos', {
     method: 'POST',
     body: JSON.stringify(pedido),
     headers: {'content-type': 'application/json'},
@@ -222,4 +240,4 @@ function actualizarClientes() {
     alert(error.message);
     if (callback) callback(error);
   });
-} */
+}
