@@ -93,15 +93,24 @@
   <script src="scripts.js"></script>
   <script type="text/javascript">
 
+  $(document).ready(function(){
+    $("#add-btn").click(function(){
+    empleados();
+    });
+    $("#account_circle-btn").click(function(){
+nuevoEmpleado();
+    });
+    $("#mode_edit-btn").click(function(){
+      modificarEmpleado();
+    });
 
-    listarEmpleados();
+  traerEmpleado();
     $("#show-form-empleado").on('click', function(){
       $("#form-empleado").toggle();
       $("#add-btn").toggle();
       $("#remove-btn").toggle();
     });
   });
-
 
 
   </script>

@@ -8,6 +8,14 @@ function obtenerIDCLiente() {
     .replace(')', '');
   return userId;
 }
+function obtenerIDEmpleados() {
+  var selectedEmpl = $(document.querySelector('.autocomplete')).val();
+  var comboVal = selectedEmpl.split(' ');
+  var userId = comboVal[(comboVal.length - 1)]
+    .replace('(cod.', '')
+    .replace(')', '');
+  return userId;
+}
 function mostrarCliente() {
   var userId = obtenerIDCLiente();
   fetch('http://localhost:3000/api/clientes/' + userId, {
@@ -110,8 +118,8 @@ function nuevoCliente(callback) {
     'apellido_cliente': form.apellido_cliente.value,
     'cuit': form.cuit.value,
     'telefono': form.telefono.value,
-    'direccion': form.direccion.value,
     'email': form.email.value,
+    'direccion': form.direccion.value,
   };
   fetch('http://localhost:3000/api/clientes', {
     method: 'POST',
@@ -233,6 +241,109 @@ function nuevoPedido(callback) {
   }).then(function(response) {
     if (response.status != 200)
       throw new Error('Error registrando pedido');
+    else
+      alert('Se cargo');
+    if (callback) callback();
+  }).catch(function(error) {
+    alert(error.message);
+    if (callback) callback(error);
+  });
+}
+
+function empleados() {
+  var userId = obtenerIDEmpleados();
+  fetch('http://localhost:3000/api/empleados/' + userId, {
+    method: 'GET',
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error registrando empleado');
+    return response.json();
+  }).then(function(empleado) {
+    $('#id_empleado').val(empleado.id_empleado);
+    $('#nombre_empleado').val(empleado.nombre_empleado);
+    $('#apellido_empleado').val(empleado.apellido_empleado);
+    $('#cuil').val(empleado.cuil);
+    $('#telefono').val(empleado.telefono);
+    $('#direccion').val(empleado.direccion);
+    $('#email').val(empleado.email);
+    M.updateTextFields();
+  }).catch(function(error) {
+    alert(error.message);
+  });
+}
+
+function traerEmpleado(callback) {
+  fetch('http://localhost:3000/api/empleados', {
+    method: 'GET',
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error registrando cliente');
+    return response.json();
+  }).then(function(empleado) {
+    let listado = _.reduce(empleado, function(result, empleado, key) {
+      let name = empleado.nombre_empleado + ' ' + empleado.apellido_empleado;
+      let code = ' (cod.' + empleado.id_empleado + ')';
+      result[name + code] = null;
+      return result;
+    }, {});
+    var elem = document.querySelector('.autocomplete');
+    var instance = M.Autocomplete.init(elem, {data: listado});
+    if (callback)
+      callback();
+  }).catch(function(error) {
+    alert(error.message);
+    if (callback)
+      callback(error);
+  });
+}
+function nuevoEmpleado(callback) {
+  var form = document.getElementById('form-cargaE');
+  console.log(form);
+  const empleado = {
+
+    'nombre_empleado': form.nombre_empleado.value,
+    'apellido_empleado': form.apellido_empleado.value,
+    'cuil': form.cuil.value,
+    'telefono': form.telefono.value,
+    'email': form.email.value,
+    'direccion': form.direccion.value,
+  };
+  fetch('http://localhost:3000/api/empleados', {
+    method: 'POST',
+    body: JSON.stringify(empleado),
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error registrando empleado');
+    else
+      alert('Se cargo');
+    if (callback) callback();
+  }).catch(function(error) {
+    alert(error.message);
+    if (callback) callback(error);
+  });
+}
+function modificarEmpleado(callback) {
+  var form = document.getElementById('form-cargaE');
+  console.log(form);
+  const empleado = {
+    'id_empleado': obtenerIDEmpleados(),
+    'apellido_empleado': form.apellido_empleado.value,
+    'nombre_empleado': form.nombre_empleado.value,
+    'cuil': form.cuil.value,
+    'telefono': form.telefono.value,
+    'email': form.email.value,
+    'direccion': form.direccion.value,
+  };
+  fetch('http://localhost:3000/api/empleados', {
+    method: 'PUT',
+    body: JSON.stringify(empleado),
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error modificando empleado');
     else
       alert('Se cargo');
     if (callback) callback();
