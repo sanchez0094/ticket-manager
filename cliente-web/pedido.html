@@ -32,20 +32,7 @@
 
   <div class="row" style="margin-top:20px">
     <div class="col s2"></div>
-        <table id="tablaPedidos">
-       <thead>
-         <tr>
-             <th>Cliente</th>
-             <th>Fecha</th>
-             <th>Estado</th>
-             <th>Editar</th>
-         </tr>
-       </thead>
 
-       <tbody id="tablaPedidosCuerpo">
-
-       </tbody>
-     </table>
    </div>
    <div class="col s2"></div>
 
@@ -55,7 +42,8 @@
    <script type="text/javascript">
 
    $(document).ready(function(){
-listarPedidos();
+var pedido = getJsonFromUrl();
+console.log(pedido);
    });
 
    </script>

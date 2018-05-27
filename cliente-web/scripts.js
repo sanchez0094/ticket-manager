@@ -352,3 +352,38 @@ function modificarEmpleado(callback) {
     if (callback) callback(error);
   });
 }
+function listarPedidos(callback) {
+  fetch('http://localhost:3000/api/pedidos?filter={"include":[{ "relation": "cliente"},{"relation": "estado"}]}', {
+    method: 'GET',
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error registrando cliente');
+    return response.json();
+  }).then(function(pedidos) {
+    var table = $('#tablaPedidosCuerpo');
+    pedidos.forEach(function(pedido) {
+      table.append(`<tr>
+        <td>${pedido.cliente.nombre_cliente}</td>
+        <td>${pedido.fecha_pedido}</td>
+        <td>${pedido.estado.nombre_estado}</td>
+        <td><a href="pedido.html?id=${pedido.id_pedido}">editar</a></td>
+        </tr> `);
+    });
+    if (callback)
+      callback();
+  }).catch(function(error) {
+    alert(error.message);
+    if (callback)
+      callback(error);
+  });
+}
+
+function getJsonFromUrl() {
+  var result = {};
+  location.search.substr(1).split('&').forEach(function(part) {
+    var item = part.split('=');
+    result[item[0]] = decodeURIComponent(item[1]);
+  });
+  return result;
+}
