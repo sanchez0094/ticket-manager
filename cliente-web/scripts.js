@@ -1,4 +1,4 @@
-/* global _,$ , fetch, document, M, alert, options  */
+/* global _,$ , fetch, document, M, alert, options, location */
 'use strict';
 function obtenerIDCLiente() {
   var selectedClient = $(document.querySelector('.autocomplete')).val();
@@ -379,6 +379,33 @@ function listarPedidos(callback) {
   });
 }
 
+function mostrarPedido(id, callback) {
+  fetch('http://localhost:3000/api/pedidos/' + id, {
+    method: 'GET',
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error registrando cliente');
+    return response.json();
+  }).then(function(pedido) {
+    console.log(pedido);
+    $('#Pedidoid').val(pedido.id_pedido);
+    $('#id_cliente').val(pedido.id_cliente);
+    $('#combo_empleados').val(pedido.id_empleado);
+    $('#combo_negocios').val(pedido.id_negocio);
+    $('#fecha_pedido').val(pedido.fecha_pedido);
+    $('#fecha_entrega').val(pedido.fecha_entrega_estipulada);
+    $('#detalle_pedido').val(pedido.detalle_pedido);
+    $('#pago_efectuado').val(pedido.pago_efectuado);
+    $('#cuenta_corriente').val(pedido.cuenta_corriente);
+    if (callback)
+      callback();
+  }).catch(function(error) {
+    alert(error.message);
+    if (callback)
+      callback(error);
+  });
+}
 function getJsonFromUrl() {
   var result = {};
   location.search.substr(1).split('&').forEach(function(part) {
@@ -386,4 +413,37 @@ function getJsonFromUrl() {
     result[item[0]] = decodeURIComponent(item[1]);
   });
   return result;
+}
+function modificarPedido(callback) {
+  var form = document.getElementById('form-edit-pedido');
+  console.log(form);
+  const pedido = {
+    'fecha_pedido': form.fecha_pedido.value,
+    'fecha_entrega_estipulada': form.fecha_entrega.value,
+    'detalle_pedido': form.detalle_pedido.value,
+    'monto': form.monto.value,
+    'pago_efectuado': form.pago_efectuado.checked,
+    'cuenta_corriente': form.cuenta_corriente.checked,
+    'seña': form.seña.value,
+    'saldo': saldo(),
+    'id_prioridad': obtenerPrioridad(),
+    'id_negocio': form.combo_negocios.value,
+    'id_cliente': obtenerIDCLiente(),
+    'id_estado': form.combo_estado.value,
+    'id_empleado': form.combo_empleados.value,
+  };
+  fetch('http://localhost:3000/api/pedidos', {
+    method: 'PUT',
+    body: JSON.stringify(pedido),
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error registrando pedido');
+    else
+      alert('Se cargo');
+    if (callback) callback();
+  }).catch(function(error) {
+    alert(error.message);
+    if (callback) callback(error);
+  });
 }

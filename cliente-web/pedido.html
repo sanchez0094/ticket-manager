@@ -29,9 +29,106 @@
         <li><a href="materialize.html">Nuevo Pedido</a></li>
     </div>
   </nav>
-
   <div class="row" style="margin-top:20px">
     <div class="col s2"></div>
+
+    <form class="col s8" id="form-edit-pedido">
+      <div class="row">
+        <div class="input-field col s9">
+          <input type="text" id="id_cliente" class="autocomplete">
+          <label for="autocomplete-input">Cliente</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <select id="combo_empleados"></select>
+          <label>Empleado</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+          <select id="combo_negocios"></select>
+          <label>Negocio</label>
+        </div>
+      </div>
+
+      <div class = "input-field col s6">
+      <input id= "fecha_pedido" type="text" class="datepicker">
+      <label for= "fecha_pedido">Fecha Pedido</label>
+      </div>
+
+      <div class = "input-field col s6" >
+        <input id= "fecha_entrega" type="text" class="datepicker">
+        <label for= "fecha_entrega">Fecha Entrega</label>
+      </div>
+      <div class="row">
+          <div class="input-field col s12">
+            <textarea id="detalle_pedido" class="materialize-textarea" data-length="1000"></textarea>
+            <label for="textarea2">Detalle del Pedido</label>
+          </div>
+        </div>
+        <p>
+          <label>
+            <input id="pago_efectuado" type="checkbox" class="filled-in"  />
+            <span>Pago Efectuado</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input id="cuenta_corriente" type="checkbox" class="filled-in"  />
+            <span>Cuenta Corriente</span>
+          </label>
+        </p>
+        <span>Prioridad</span>
+        <p>
+          <label>
+            <input id="alta" class="with-gap" name="group3" type="radio" checked />
+            <span>Alta</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input id="media" class="with-gap" name="group3" type="radio" checked />
+            <span>Media</span>
+          </label>
+        </p>
+        <p>
+          <label>
+            <input id="baja" class="with-gap" name="group3" type="radio" checked />
+            <span>Baja</span>
+          </label>
+        </p>
+      <div class="row">
+        <div class="input-field col s12">
+          <select id="combo_estado"></select>
+          <label>Estado</label>
+        </div>
+      </div>
+      <div class="row">
+       <div class="col s4">
+        Seña: $
+         <div class="input-field inline">
+           <input id="seña" type="number" class="validate">
+         </div>
+       </div>
+        <div class="col s4">
+         Monto: $
+          <div class="input-field inline">
+            <input id="monto" type="number" class="validate">
+          </div>
+        </div>
+         <div class="col s4">
+          Saldo Restante: $
+           <div class="input-field inline">
+             <input id="saldoRestante" type="number" class="validate">
+           </div>
+           </div>
+          </div>
+          <a id="btn_cargar" class="waves-effect waves-light btn ">Cargar</a>
+
+
+  </form>
 
    </div>
    <div class="col s2"></div>
@@ -43,8 +140,16 @@
 
    $(document).ready(function(){
 var pedido = getJsonFromUrl();
-console.log(pedido);
+mostrarPedido(pedido.id);
    });
+   $("#btn_cargar").click(function(){
+       modificarPedido();
+     });
+
+
+     listarEmpleados();
+     listarNegocios();
+     listarEstado();
 
    </script>
  </body>
