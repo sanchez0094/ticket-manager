@@ -1,5 +1,8 @@
 /* global _,$ , fetch, document, M, alert, options, location */
 'use strict';
+const PRIORIDAD_BAJA = 6;
+const PRIORIDAD_ALTA = 5;
+const PRIORIDAD_MEDIA = 7;
 function obtenerIDCLiente() {
   var selectedClient = $(document.querySelector('.autocomplete')).val();
   var comboVal = selectedClient.split(' ');
@@ -65,7 +68,7 @@ function listarClientes(callback) {
   });
 }
 
-function listarEmpleados() {
+function listarEmpleados(selectedId) {
   fetch('http://localhost:3000/api/empleados', {
     method: 'GET',
     headers: {'content-type': 'application/json'},
@@ -76,7 +79,8 @@ function listarEmpleados() {
   }).then(function(empleados) {
     $('#combo_empleados').append('<option>Seleccione uno</option>');
     _.each(empleados, function(e) {
-      let html = `<option value="${e.id_empleado}">
+      let selected = selectedId && selectedId == e.id_empleado ? 'selected' : '';
+      let html = `<option value="${e.id_empleado}" ${selected}>
         ${e.nombre_empleado} ${e.apellido_empleado}</option>`;
       $('#combo_empleados').append(html);
     });
@@ -205,11 +209,11 @@ $('#fecha_entrega').change(function() {
 function obtenerPrioridad() {
   var form = document.getElementById('form-pedido');
   if (form.alta.checked) {
-    return 5;
+    return PRIORIDAD_ALTA;
   } else if (form.media.checked) {
-    return  7;
+    return  PRIORIDAD_MEDIA;
   } else if (form.baja.checked) {
-    return 6;
+    return PRIORIDAD_BAJA;
   }
 }
 function saldo() {
@@ -380,7 +384,7 @@ function listarPedidos(callback) {
 }
 
 function mostrarPedido(id, callback) {
-  fetch('http://localhost:3000/api/pedidos/' + id, {
+  fetch('http://localhost:3000/api/pedidos/' + id + '?filter={"include":[{ "relation": "cliente"}]}', {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -390,16 +394,29 @@ function mostrarPedido(id, callback) {
   }).then(function(pedido) {
     console.log(pedido);
     $('#Pedidoid').val(pedido.id_pedido);
-    $('#id_cliente').val(pedido.id_cliente);
-    $('#combo_empleados').val(pedido.id_empleado);
+    $('#nombre_cliente').val(pedido.cliente.nombre_cliente + ' ' +
+    pedido.cliente.apellido_cliente);
+    $('#combo_empleados').select(pedido.id_empleado);
     $('#combo_negocios').val(pedido.id_negocio);
-    $('#fecha_pedido').val(pedido.fecha_pedido);
-    $('#fecha_entrega').val(pedido.fecha_entrega_estipulada);
+    $('#fecha_pedido').val(pedido.fecha_pedido.split('T')[0]);
+    $('#fecha_entrega').val(pedido.fecha_entrega_estipulada.split('T')[0]);
     $('#detalle_pedido').val(pedido.detalle_pedido);
-    $('#pago_efectuado').val(pedido.pago_efectuado);
     $('#cuenta_corriente').val(pedido.cuenta_corriente);
+    $('#monto').val(pedido.monto);
+    $('#seña').val(pedido.seña);
+    $('#saldoRestante').val(pedido.saldo);
+    document.getElementById('combo_estado').selectedIndex = pedido.id_estado;
+    document.getElementById('pago_efectuado').checked = pedido.pago_efectuado;
+    document.getElementById('cuenta_corriente').checked =
+    pedido.cuenta_corriente;
+    if (pedido.id_prioridad == PRIORIDAD_ALTA)
+      document.getElementById('alta').checked = true;
+    if (pedido.id_prioridad == PRIORIDAD_MEDIA)
+      document.getElementById('media').checked = true;
+    if (pedido.id_prioridad == PRIORIDAD_BAJA)
+      document.getElementById('baja').checked = true;
     if (callback)
-      callback();
+      callback(null, pedido);
   }).catch(function(error) {
     alert(error.message);
     if (callback)
@@ -446,4 +463,35 @@ function modificarPedido(callback) {
     alert(error.message);
     if (callback) callback(error);
   });
+}
+function listaDeCLientes(callback) {
+  fetch('http://localhost:3000/api/clientes', {
+    method: 'GET',
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error registrando cliente');
+    return response.json();
+  }).then(function(pedidos) {
+    var table = $('#tablaClienteCuerpo');
+    pedidos.forEach(function(cliente) {
+      table.append(`<tr>
+        <td>${cliente.nombre_cliente}</td>
+        <td>${cliente.apellido_cliente}</td>
+        <td>${cliente.cuit}</td>
+        <td>${cliente.email}</td>
+        <td>${cliente.telefono}</td>
+        <td>${cliente.direccion}</td>
+        </tr> `);
+    });
+    if (callback)
+      callback();
+  }).catch(function(error) {
+    alert(error.message);
+    if (callback)
+      callback(error);
+  });
+}
+function fecha() {
+
 }

@@ -35,8 +35,8 @@
     <form class="col s8" id="form-edit-pedido">
       <div class="row">
         <div class="input-field col s9">
-          <input type="text" id="id_cliente" class="autocomplete">
-          <label for="autocomplete-input">Cliente</label>
+          <input type="text" id="nombre_cliente" >
+          <label >Cliente</label>
         </div>
       </div>
       <div class="row">
@@ -140,16 +140,19 @@
 
    $(document).ready(function(){
 var pedido = getJsonFromUrl();
-mostrarPedido(pedido.id);
+mostrarPedido(pedido.id, function(error, pedido){
+  if(error)
+  alert('Error al leer pedido');
+  else{
+    listarEmpleados(pedido.id_empleado);
+    listarNegocios();
+    listarEstado();
+  }
+});
    });
    $("#btn_cargar").click(function(){
        modificarPedido();
      });
-
-
-     listarEmpleados();
-     listarNegocios();
-     listarEstado();
 
    </script>
  </body>
