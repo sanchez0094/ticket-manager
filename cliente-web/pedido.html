@@ -119,7 +119,7 @@
           </div>
         </div>
          <div class="col s4">
-          Saldo Restante: $
+          Saldo: $
            <div class="input-field inline">
              <input id="saldoRestante" type="number" class="validate">
            </div>
@@ -145,8 +145,8 @@ mostrarPedido(pedido.id, function(error, pedido){
   alert('Error al leer pedido');
   else{
     listarEmpleados(pedido.id_empleado);
-    listarNegocios();
-    listarEstado();
+    listarNegocios(pedido.id_negocio);
+    listarEstado(pedido.id_estado);
   }
 });
    });

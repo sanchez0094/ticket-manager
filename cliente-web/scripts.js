@@ -26,7 +26,7 @@ function mostrarCliente() {
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
-      throw new Error('Error registrando cliente');
+      throw new Error('Error');
     return response.json();
   }).then(function(cliente) {
     $('#id_cliente').val(cliente.id_cliente);
@@ -48,7 +48,7 @@ function listarClientes(callback) {
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
-      throw new Error('Error registrando cliente');
+      throw new Error('Error');
     return response.json();
   }).then(function(clientes) {
     let listado = _.reduce(clientes, function(result, cliente, key) {
@@ -74,7 +74,7 @@ function listarEmpleados(selectedId) {
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
-      throw new Error('Error registrando cliente');
+      throw new Error('Error');
     return response.json();
   }).then(function(empleados) {
     $('#combo_empleados').append('<option>Seleccione uno</option>');
@@ -91,22 +91,23 @@ function listarEmpleados(selectedId) {
     alert(error.message);
   });
 }
-function listarNegocios() {
+function listarNegocios(selectedId) {
   fetch('http://localhost:3000/api/negocios', {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
-      throw new Error('Error registrando cliente');
+      throw new Error('Error');
     return response.json();
   }).then(function(negocio) {
     $('#combo_negocios').append('<option>Seleccione uno</option>');
     _.each(negocio, function(n) {
-      let html = `<option value="${n.id_negocio}">
+      let selected = selectedId && selectedId == n.id_negocio ?
+      'selected' : '';
+      let html = `<option value="${n.id_negocio}" ${selected}>
         ${n.nombre_negocio}</option>`;
       $('#combo_negocios').append(html);
     });
-    // var elem = document.querySelector('select');
     var elem = $('#combo_negocios');
     var instance = M.FormSelect.init(elem);
   }).catch(function(error) {
@@ -132,7 +133,7 @@ function nuevoCliente(callback) {
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
-      throw new Error('Error registrando cliente');
+      throw new Error('Error');
     else
       alert('Se cargo');
     if (callback) callback();
@@ -159,7 +160,7 @@ function modificarCliente(callback) {
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
-      throw new Error('Error registrando cliente');
+      throw new Error('Error');
     else
       alert('Se cargo');
     if (callback) callback();
@@ -168,22 +169,23 @@ function modificarCliente(callback) {
     if (callback) callback(error);
   });
 }
-function listarEstado() {
+function listarEstado(selectedId) {
   fetch('http://localhost:3000/api/estado_pedidos', {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
-      throw new Error('Error registrando cliente');
+      throw new Error('Error');
     return response.json();
   }).then(function(estados) {
     $('#combo_estado').append('<option>Seleccione uno</option>');
     _.each(estados, function(p) {
-      let html = `<option value="${p.id_estado}">
+      let selected = selectedId && selectedId == p.id_estado ?
+      'selected' : '';
+      let html = `<option value="${p.id_estado}" ${selected}>
         ${p.nombre_estado}</option>`;
       $('#combo_estado').append(html);
     });
-    // var elem = document.querySelector('select');
     var elem = $('#combo_estado');
     var instance = M.FormSelect.init(elem);
   }).catch(function(error) {
@@ -210,11 +212,11 @@ $('#fecha_entrega').change(function() {
 function obtenerPrioridad() {
   var form = document.getElementById('form-pedido');
   if (form.alta.checked) {
-    return PRIORIDAD_ALTA;
+    return 5;
   } else if (form.media.checked) {
-    return  PRIORIDAD_MEDIA;
+    return  7;
   } else if (form.baja.checked) {
-    return PRIORIDAD_BAJA;
+    return 6;
   }
 }
 function saldo() {
@@ -284,7 +286,7 @@ function traerEmpleado(callback) {
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
-      throw new Error('Error registrando cliente');
+      throw new Error('Error');
     return response.json();
   }).then(function(empleado) {
     let listado = _.reduce(empleado, function(result, empleado, key) {
@@ -365,7 +367,7 @@ function listarPedidos(filter, callback) {
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
-      throw new Error('Error registrando cliente');
+      throw new Error('Error');
     return response.json();
   }).then(function(pedidos) {
     pedidos.forEach(function(pedido) {
@@ -373,7 +375,8 @@ function listarPedidos(filter, callback) {
       if (match.test(pedido.cliente.nombre_cliente) ||
       match.test(pedido.cliente.apellido_cliente) || !filter) {
         table.append(`<tr>
-          <td>${pedido.cliente.nombre_cliente} ${pedido.cliente.apellido_cliente} </td>
+          <td>${pedido.cliente.nombre_cliente}
+          ${pedido.cliente.apellido_cliente} </td>
           <td>${pedido.fecha_pedido.split('T')[0]}</td>
           <td>${pedido.estado.nombre_estado}</td>
           <td><a href="pedido.html?id=${pedido.id_pedido}">editar</a></td>
@@ -395,31 +398,27 @@ function mostrarPedido(id, callback) {
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
-      throw new Error('Error registrando cliente');
+      throw new Error('Error');
     return response.json();
   }).then(function(pedido) {
     console.log(pedido);
     $('#Pedidoid').val(pedido.id_pedido);
     $('#nombre_cliente').val(pedido.cliente.nombre_cliente + ' ' +
     pedido.cliente.apellido_cliente);
-    $('#combo_empleados').select(pedido.id_empleado);
-    $('#combo_negocios').val(pedido.id_negocio);
     $('#fecha_pedido').val(pedido.fecha_pedido.split('T')[0]);
     $('#fecha_entrega').val(pedido.fecha_entrega_estipulada.split('T')[0]);
     $('#detalle_pedido').val(pedido.detalle_pedido);
-    $('#cuenta_corriente').val(pedido.cuenta_corriente);
     $('#monto').val(pedido.monto);
     $('#seña').val(pedido.seña);
     $('#saldoRestante').val(pedido.saldo);
-    document.getElementById('combo_estado').selectedIndex = pedido.id_estado;
     document.getElementById('pago_efectuado').checked = pedido.pago_efectuado;
     document.getElementById('cuenta_corriente').checked =
     pedido.cuenta_corriente;
-    if (pedido.id_prioridad == PRIORIDAD_ALTA)
+    if (pedido.id_prioridad == 5)
       document.getElementById('alta').checked = true;
-    if (pedido.id_prioridad == PRIORIDAD_MEDIA)
+    if (pedido.id_prioridad == 7)
       document.getElementById('media').checked = true;
-    if (pedido.id_prioridad == PRIORIDAD_BAJA)
+    if (pedido.id_prioridad == 6)
       document.getElementById('baja').checked = true;
     if (callback)
       callback(null, pedido);
@@ -478,7 +477,7 @@ function listaDeCLientes(filter, callback) {
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
-      throw new Error('Error registrando cliente');
+      throw new Error('Error');
     return response.json();
   }).then(function(cliente) {
     cliente.forEach(function(cliente) {
