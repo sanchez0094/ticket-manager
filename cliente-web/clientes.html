@@ -26,9 +26,19 @@
         <li><a href="clientes.html">Clientes</a></li>
         <li><a href="empleado.html">Empleados</a></li>
         <li><a href="reportes.html">Reportes</a></li>
-        <li><a href="materialize.html">Nuevo Pedido</a></li>
+        <li><a href="nuevoPedido.html">Nuevo Pedido</a></li>
     </div>
   </nav>
+  <nav>
+    <div class="nav-wrapper">
+      <form> <div class="input-field">
+        <input id="search-cliente" type="search" required>
+        <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+        <i class="material-icons">close</i>
+      </div>
+    </form>
+  </div>
+    </nav>
 <div style="padding:25px">
   <div class="row" style="margin-top:20px">
     <div class="col s2"></div>
@@ -56,10 +66,14 @@
    <script src="scripts.js"></script>
    <script type="text/javascript">
 
-   $(document).ready(function(){
-listaDeCLientes();
-   });
 
+   $(document).ready(function(){
+      listaDeCLientes();
+      $('#search-cliente').keyup(function(){
+        listaDeCLientes($('#search-cliente').val());
+      })
+
+   });
    </script>
  </body>
  </html>

@@ -79,7 +79,8 @@ function listarEmpleados(selectedId) {
   }).then(function(empleados) {
     $('#combo_empleados').append('<option>Seleccione uno</option>');
     _.each(empleados, function(e) {
-      let selected = selectedId && selectedId == e.id_empleado ? 'selected' : '';
+      let selected = selectedId && selectedId == e.id_empleado ?
+      'selected' : '';
       let html = `<option value="${e.id_empleado}" ${selected}>
         ${e.nombre_empleado} ${e.apellido_empleado}</option>`;
       $('#combo_empleados').append(html);
@@ -356,7 +357,9 @@ function modificarEmpleado(callback) {
     if (callback) callback(error);
   });
 }
-function listarPedidos(callback) {
+function listarPedidos(filter, callback) {
+  var table = $('#tablaPedidosCuerpo');
+  table.html('');
   fetch('http://localhost:3000/api/pedidos?filter={"include":[{ "relation": "cliente"},{"relation": "estado"}]}', {
     method: 'GET',
     headers: {'content-type': 'application/json'},
@@ -365,14 +368,17 @@ function listarPedidos(callback) {
       throw new Error('Error registrando cliente');
     return response.json();
   }).then(function(pedidos) {
-    var table = $('#tablaPedidosCuerpo');
     pedidos.forEach(function(pedido) {
-      table.append(`<tr>
-        <td>${pedido.cliente.nombre_cliente}</td>
-        <td>${pedido.fecha_pedido}</td>
-        <td>${pedido.estado.nombre_estado}</td>
-        <td><a href="pedido.html?id=${pedido.id_pedido}">editar</a></td>
-        </tr> `);
+      let match = new RegExp(filter);
+      if (match.test(pedido.cliente.nombre_cliente) ||
+      match.test(pedido.cliente.apellido_cliente) || !filter) {
+        table.append(`<tr>
+          <td>${pedido.cliente.nombre_cliente} ${pedido.cliente.apellido_cliente} </td>
+          <td>${pedido.fecha_pedido.split('T')[0]}</td>
+          <td>${pedido.estado.nombre_estado}</td>
+          <td><a href="pedido.html?id=${pedido.id_pedido}">editar</a></td>
+          </tr> `);
+      }
     });
     if (callback)
       callback();
@@ -464,7 +470,9 @@ function modificarPedido(callback) {
     if (callback) callback(error);
   });
 }
-function listaDeCLientes(callback) {
+function listaDeCLientes(filter, callback) {
+  var table = $('#tablaClienteCuerpo');
+  table.html('');
   fetch('http://localhost:3000/api/clientes', {
     method: 'GET',
     headers: {'content-type': 'application/json'},
@@ -472,17 +480,20 @@ function listaDeCLientes(callback) {
     if (response.status != 200)
       throw new Error('Error registrando cliente');
     return response.json();
-  }).then(function(pedidos) {
-    var table = $('#tablaClienteCuerpo');
-    pedidos.forEach(function(cliente) {
-      table.append(`<tr>
-        <td>${cliente.nombre_cliente}</td>
-        <td>${cliente.apellido_cliente}</td>
-        <td>${cliente.cuit}</td>
-        <td>${cliente.email}</td>
-        <td>${cliente.telefono}</td>
-        <td>${cliente.direccion}</td>
-        </tr> `);
+  }).then(function(cliente) {
+    cliente.forEach(function(cliente) {
+      let match = new RegExp(filter);
+      if (match.test(cliente.nombre_cliente) ||
+      match.test(cliente.apellido_cliente) || !filter) {
+        table.append(`<tr>
+          <td>${cliente.nombre_cliente}</td>
+          <td>${cliente.apellido_cliente}</td>
+          <td>${cliente.cuit}</td>
+          <td>${cliente.email}</td>
+          <td>${cliente.telefono}</td>
+          <td>${cliente.direccion}</td>
+          </tr> `);
+      }
     });
     if (callback)
       callback();
@@ -491,7 +502,4 @@ function listaDeCLientes(callback) {
     if (callback)
       callback(error);
   });
-}
-function fecha() {
-
 }
