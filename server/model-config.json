@@ -58,5 +58,10 @@
   "pedido":{
     "dataSource": "ticket-manager-db",
     "public": true
+  },
+  "login":{
+    "dataSource": "ticket-manager-db",
+    "public": true
   }
+
 }

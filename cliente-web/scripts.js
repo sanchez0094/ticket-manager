@@ -212,11 +212,21 @@ $('#fecha_entrega').change(function() {
 function obtenerPrioridad() {
   var form = document.getElementById('form-pedido');
   if (form.alta.checked) {
-    return 5;
+    return PRIORIDAD_ALTA;
   } else if (form.media.checked) {
-    return  7;
+    return  PRIORIDAD_MEDIA;
   } else if (form.baja.checked) {
-    return 6;
+    return PRIORIDAD_BAJA;
+  }
+}
+function obtenerPrioridadModifPedido() {
+  var form = document.getElementById('form-edit-pedido');
+  if (form.alta.checked) {
+    return PRIORIDAD_ALTA;
+  } else if (form.media.checked) {
+    return  PRIORIDAD_MEDIA;
+  } else if (form.baja.checked) {
+    return PRIORIDAD_BAJA;
   }
 }
 function saldo() {
@@ -391,8 +401,12 @@ function listarPedidos(filter, callback) {
       callback(error);
   });
 }
-
+function idPedido() {
+  return iid;
+}
+var iid;
 function mostrarPedido(id, callback) {
+  iid = id;
   fetch('http://localhost:3000/api/pedidos/' + id + '?filter={"include":[{ "relation": "cliente"}]}', {
     method: 'GET',
     headers: {'content-type': 'application/json'},
@@ -405,6 +419,7 @@ function mostrarPedido(id, callback) {
     $('#Pedidoid').val(pedido.id_pedido);
     $('#nombre_cliente').val(pedido.cliente.nombre_cliente + ' ' +
     pedido.cliente.apellido_cliente);
+    $('#id_cliente').val(pedido.id_cliente);
     $('#fecha_pedido').val(pedido.fecha_pedido.split('T')[0]);
     $('#fecha_entrega').val(pedido.fecha_entrega_estipulada.split('T')[0]);
     $('#detalle_pedido').val(pedido.detalle_pedido);
@@ -414,11 +429,11 @@ function mostrarPedido(id, callback) {
     document.getElementById('pago_efectuado').checked = pedido.pago_efectuado;
     document.getElementById('cuenta_corriente').checked =
     pedido.cuenta_corriente;
-    if (pedido.id_prioridad == 5)
+    if (pedido.id_prioridad == PRIORIDAD_ALTA)
       document.getElementById('alta').checked = true;
-    if (pedido.id_prioridad == 7)
+    if (pedido.id_prioridad == PRIORIDAD_MEDIA)
       document.getElementById('media').checked = true;
-    if (pedido.id_prioridad == 6)
+    if (pedido.id_prioridad == PRIORIDAD_BAJA)
       document.getElementById('baja').checked = true;
     if (callback)
       callback(null, pedido);
@@ -440,6 +455,7 @@ function modificarPedido(callback) {
   var form = document.getElementById('form-edit-pedido');
   console.log(form);
   const pedido = {
+    'id_pedido': idPedido(),
     'fecha_pedido': form.fecha_pedido.value,
     'fecha_entrega_estipulada': form.fecha_entrega.value,
     'detalle_pedido': form.detalle_pedido.value,
@@ -448,9 +464,9 @@ function modificarPedido(callback) {
     'cuenta_corriente': form.cuenta_corriente.checked,
     'seña': form.seña.value,
     'saldo': saldo(),
-    'id_prioridad': obtenerPrioridad(),
     'id_negocio': form.combo_negocios.value,
-    'id_cliente': obtenerIDCLiente(),
+    'id_cliente': form.id_cliente.value,
+    'id_prioridad': obtenerPrioridadModifPedido(),
     'id_estado': form.combo_estado.value,
     'id_empleado': form.combo_empleados.value,
   };
@@ -460,7 +476,7 @@ function modificarPedido(callback) {
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
-      throw new Error('Error registrando pedido');
+      throw new Error('Error registrando pedido' + console.log(pedido));
     else
       alert('Se cargo');
     if (callback) callback();

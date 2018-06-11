@@ -1,0 +1,14 @@
+{
+  "name": "login",
+  "forceId":true,
+  "properties": {
+    "mail": {
+      "type": "string",
+      "id": true
+    },
+    "pass": {
+      "type": "string",
+      "required":true
+    }
+ }
+}
