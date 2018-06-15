@@ -1,65 +1,47 @@
-import React, { Component } from 'react'
-import autobind from 'autobind-decorator'
-import { reduxForm } from 'redux-form'
-import { login, forgot } from 'actions/user'
-import styles from './styles'
+/* global _,$ , fetch, document, M, alert, options, location */
+'use strict';
+function validacion(callback) {
+  fetch('http://localhost:3000/api/logins', {
+    method: 'GET',
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error');
+    return response.json();
+  }).then(function(login) {
+    if (login.mail == $('#email')) {
+      if (login.pass == $('#password')) {
+        document.location.href = 'pedido.html';
+      } else alert('Contraseña incorrecta');
+    } else alert('Usuario o contraseña incorrectas.');
+    if (callback)
+      callback();
+  }).catch(function(error) {
+    alert(error.message);
+    if (callback)
+      callback(error);
+  });
+}
+function loginNuevo(callback) {
+  var form = document.getElementById('form-loginNuevo');
+  console.log(form);
+  const login = {
 
-@reduxForm(
-  {
-    form: 'login-form',
-    fields: ['email', 'password'],
-    validate: ({ email, password }) => { // eslint-disable-line
-      const errors = {}
-      if (!email) { errors.email = 'Field Required *' }
-      if (!password) { errors.password = 'Field Required *' }
-      return errors
-    },
-  },
-  null,
-  {
-    login: login.init,
-    forgot: forgot.init,
-  },
-)
-class Login extends Component {
-  @autobind
-  loginFlow(values) {
-    return new Promise((resolve, reject) => {
-      this.props.login({ ...values, resolve, reject })
-    })
-  }
-
-  render() {
-    const {
-      handleSubmit,
-      submitting,
-      fields: { email, password },
-      error,
-    } = this.props
-
-    return (
-      <form className={styles.loginForm} onSubmit={handleSubmit(this.loginFlow)}>
-        <input {...email} type="email" value={email.value} placeholder="email" />
-        {
-          email.touched &&
-          <div className={styles.error}>{email.error}</div>
-        }
-        <input {...password} type="password" value={password.value} placeholder="password" />
-        {
-          password.touched &&
-          <div className={styles.error}>{password.error}</div>
-        }
-        {
-          error &&
-          <div className={styles.error}>{error.error}</div>
-        }
-        <a className={styles.forgot} onClick={this.props.forgot}>
-          Forgot password
-        </a>
-        <button className={styles.login} disabled={submitting}>
-          { submitting ? '+' : '-' } Log in
-        </button>
-      </form>
-    )
-  }
+    'mail': form.email.value,
+    'pass': form.password.value,
+  };
+  fetch('http://localhost:3000/api/logins', {
+    method: 'POST',
+    body: JSON.stringify(login),
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error');
+    else
+      alert('Se cargo');
+    if (callback) callback();
+  }).catch(function(error) {
+    alert(error.message);
+    if (callback) callback(error);
+  });
 }

@@ -1,10 +1,11 @@
 {
   "name": "login",
-  "forceId":true,
+  "forceId":false,
   "properties": {
     "mail": {
       "type": "string",
-      "id": true
+      "id": true,
+      "required":true
     },
     "pass": {
       "type": "string",

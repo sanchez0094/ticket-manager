@@ -49,7 +49,7 @@
         <div class="z-depth-1 grey lighten-4 row"
                   style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
 
-          <form class="col s12" method="post">
+          <form class="col s12" method="post" id="form-login">
             <div class='row'>
               <div class='col s12'>
               </div>
@@ -66,11 +66,11 @@
               <div class='input-field col s12'>
                 <input class='validate' type='password' name='password' id='password' />
                 <label for='password'>Contraseña</label>
-              </div>
+            <!--  </div>
               <label style='float: right;'>
 								<a class='pink-text' href='#!'><b>¿Olvidaste tu contraseña?</b></a>
 							</label>
-            </div>
+            </div> -->
 
             <br />
             <center>
@@ -81,7 +81,7 @@
           </form>
         </div>
       </div>
-      <a href="#!">Crear Nueva Cuenta</a>
+      <a href="loginNuevo.html">Crear Nueva Cuenta</a>
     </center>
 
     <div class="section"></div>
@@ -90,6 +90,16 @@
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
-</body>
+  <script src="login.js"></script>
+  <script type="text/javascript">
 
+  $(document).ready(function(){
+    $("#btn_login").click(function(){
+    validacion();
+    });
+});
+
+
+  </script>
+</body>
 </html>

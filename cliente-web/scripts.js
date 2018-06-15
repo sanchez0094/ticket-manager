@@ -518,3 +518,24 @@ function listaDeCLientes(filter, callback) {
       callback(error);
   });
 }
+function reporte() {
+  fetch('http://localhost:3000/api/pedidos?filter={"where": {"or": [{"fecha":{ "Date()"}}]}}');
+} // generar reporte diario de importe total de señas
+function reporte1() {
+  const date = new Date();
+  const ultimoDia = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  const inicioMes =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
+                      date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-01`;
+  const finMes =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
+              date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${ultimoDia}`;
+  fetch('http://localhost:3000/api/pedidos?filter={"where": {"or": [{"id_estado": 2},{"id_estado": 3}],"and" :[{"fecha": {gte: "$(#inicioMes)" }}},{"fecha": {gte: "$(ultimoDia)"}}}]"include":[{ "relation": "estado_pedido"} ]}}');
+}// generar reporte mensulaes de importes de trabajos realizados y entregados
+
+function reporte2() {
+  const date = new Date();
+  fetch('http://localhost:3000/api/pedidos?filter={"where": {"=": [{"fecha":{ "Date()"}}], "and": [{"id_estado":2}]}}');
+}// generar reporte diario de trabajos pendientes
+function reporte3() {
+  const date = new Date();
+  fetch('http://localhost:3000/api/pedidos?filter={"where": {"=": [{"fecha":{ "Date()"}}], "and": [{"id_estado":3}]}}');
+} // generar reporte diario de trabajos realizados
