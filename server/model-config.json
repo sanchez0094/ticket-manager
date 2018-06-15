@@ -14,25 +14,25 @@
     ]
   },
   "User": {
-    "dataSource": "db"
+    "dataSource": "ticket-manager-db"
   },
   "AccessToken": {
-    "dataSource": "db",
+    "dataSource": "ticket-manager-db",
     "public": false
   },
   "ACL": {
-    "dataSource": "db",
+    "dataSource": "ticket-manager-db",
     "public": false
   },
   "RoleMapping": {
-    "dataSource": "db",
+    "dataSource": "ticket-manager-db",
     "public": false,
     "options": {
       "strictObjectIDCoercion": true
     }
   },
   "Role": {
-    "dataSource": "db",
+    "dataSource": "ticket-manager-db",
     "public": false
   },
   "cliente":{
