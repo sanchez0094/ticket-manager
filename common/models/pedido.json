@@ -62,7 +62,8 @@
       "foreignKey": "id_empleado"
     }
   },
-  "acls": [{       "accessType": "*",
+  "acls": [{
+          "accessType": "*",
            "principalType": "ROLE",
             "principalId": "$everyone",
             "permission": "DENY",
