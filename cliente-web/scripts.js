@@ -1,8 +1,16 @@
-/* global _,$ , fetch, document, M, alert, options, location */
+/* global _,$ , fetch, document, M, alert, options, location, localStorage */
 'use strict';
 const PRIORIDAD_BAJA = 6;
 const PRIORIDAD_ALTA = 5;
 const PRIORIDAD_MEDIA = 7;
+
+function getAuthorizedQuery(params) {
+  let query = typeof params == 'string' ? params.split('&') : [];
+  const session = localStorage.getItem('session');
+  query.push('access_token=' + session.id);
+  return `?${query.join('&')}`;
+}
+
 function obtenerIDCLiente() {
   var selectedClient = $(document.querySelector('.autocomplete')).val();
   var comboVal = selectedClient.split(' ');
@@ -372,7 +380,10 @@ function modificarEmpleado(callback) {
 function listarPedidos(filter, callback) {
   var table = $('#tablaPedidosCuerpo');
   table.html('');
-  fetch('http://localhost:3000/api/pedidos?filter={"include":[{ "relation": "cliente"},{"relation": "estado"}]}', {
+  const query = getAuthorizedQuery(`filter={"include":[
+    { "relation": "cliente"},{"relation": "estado"}
+  ]}`);
+  fetch('http://localhost:3000/api/pedidos' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {

@@ -1,36 +1,33 @@
-/* global _,$ , fetch, document, M, alert, options, location */
+/* global _,$ , fetch, document, alert, options, location, localStorage, window */
 'use strict';
-function validacion(callback) {
-  fetch('http://localhost:3000/api/logins', {
-    method: 'GET',
+function validacion() {
+  fetch('http://localhost:3000/api/Users/login', {
+    method: 'POST',
+    body: JSON.stringify({
+      email: $('#email').val(),
+      password: $('#password'),
+    }),
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
       throw new Error('Error');
     return response.json();
-  }).then(function(login) {
-    if (login.mail == $('#email')) {
-      if (login.pass == $('#password')) {
-        document.location.href = 'pedido.html';
-      } else alert('Contraseña incorrecta');
-    } else alert('Usuario o contraseña incorrectas.');
-    if (callback)
-      callback();
+  }).then(function(session) {
+    localStorage.setItem('session', JSON.stringify(session));
+    window.location = '/pedidos.html';
   }).catch(function(error) {
-    alert(error.message);
-    if (callback)
-      callback(error);
+    alert('Usuario o contraseña incorrectas.');
   });
 }
+
 function loginNuevo(callback) {
   var form = document.getElementById('form-loginNuevo');
   console.log(form);
   const login = {
-
-    'mail': form.email.value,
-    'pass': form.password.value,
+    'email': form.email.value,
+    'password': form.password.value,
   };
-  fetch('http://localhost:3000/api/logins', {
+  fetch('http://localhost:3000/api/Users', {
     method: 'POST',
     body: JSON.stringify(login),
     headers: {'content-type': 'application/json'},
