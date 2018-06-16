@@ -7,7 +7,7 @@ const PRIORIDAD_MEDIA = 7;
 function getAuthorizedQuery(params) {
   let query = typeof params == 'string' ? params.split('&') : [];
   const session = localStorage.getItem('session');
-  query.push('access_token=' + session.id);
+  query.push('access_token=' + JSON.parse(session).id);
   return `?${query.join('&')}`;
 }
 
@@ -29,7 +29,8 @@ function obtenerIDEmpleados() {
 }
 function mostrarCliente() {
   var userId = obtenerIDCLiente();
-  fetch('http://localhost:3000/api/clientes/' + userId, {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/clientes/' + userId + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -51,7 +52,8 @@ function mostrarCliente() {
 }
 
 function listarClientes(callback) {
-  fetch('http://localhost:3000/api/clientes', {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/clientes' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -77,7 +79,8 @@ function listarClientes(callback) {
 }
 
 function listarEmpleados(selectedId) {
-  fetch('http://localhost:3000/api/empleados', {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/empleados' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -100,7 +103,8 @@ function listarEmpleados(selectedId) {
   });
 }
 function listarNegocios(selectedId) {
-  fetch('http://localhost:3000/api/negocios', {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/negocios' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -135,7 +139,8 @@ function nuevoCliente(callback) {
     'email': form.email.value,
     'direccion': form.direccion.value,
   };
-  fetch('http://localhost:3000/api/clientes', {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/clientes' + query, {
     method: 'POST',
     body: JSON.stringify(cliente),
     headers: {'content-type': 'application/json'},
@@ -162,7 +167,8 @@ function modificarCliente(callback) {
     'direccion': form.direccion.value,
     'email': form.email.value,
   };
-  fetch('http://localhost:3000/api/clientes', {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/clientes' + query, {
     method: 'PUT',
     body: JSON.stringify(cliente),
     headers: {'content-type': 'application/json'},
@@ -178,7 +184,8 @@ function modificarCliente(callback) {
   });
 }
 function listarEstado(selectedId) {
-  fetch('http://localhost:3000/api/estado_pedidos', {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/estado_pedidos' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -259,7 +266,8 @@ function nuevoPedido(callback) {
     'id_estado': form.combo_estado.value,
     'id_empleado': form.combo_empleados.value,
   };
-  fetch('http://localhost:3000/api/pedidos', {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/pedidos' + query, {
     method: 'POST',
     body: JSON.stringify(pedido),
     headers: {'content-type': 'application/json'},
@@ -277,7 +285,8 @@ function nuevoPedido(callback) {
 
 function empleados() {
   var userId = obtenerIDEmpleados();
-  fetch('http://localhost:3000/api/empleados/' + userId, {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/empleados/' + userId + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -299,7 +308,8 @@ function empleados() {
 }
 
 function traerEmpleado(callback) {
-  fetch('http://localhost:3000/api/empleados', {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/empleados' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -335,7 +345,8 @@ function nuevoEmpleado(callback) {
     'email': form.email.value,
     'direccion': form.direccion.value,
   };
-  fetch('http://localhost:3000/api/empleados', {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/empleados' + query, {
     method: 'POST',
     body: JSON.stringify(empleado),
     headers: {'content-type': 'application/json'},
@@ -362,7 +373,8 @@ function modificarEmpleado(callback) {
     'email': form.email.value,
     'direccion': form.direccion.value,
   };
-  fetch('http://localhost:3000/api/empleados', {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/empleados' + query, {
     method: 'PUT',
     body: JSON.stringify(empleado),
     headers: {'content-type': 'application/json'},
@@ -418,7 +430,8 @@ function idPedido() {
 var iid;
 function mostrarPedido(id, callback) {
   iid = id;
-  fetch('http://localhost:3000/api/pedidos/' + id + '?filter={"include":[{ "relation": "cliente"}]}', {
+  let query = getAuthorizedQuery('?filter={"include":[{ "relation": "cliente"}]}');
+  fetch('http://localhost:3000/api/pedidos/' + id + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -481,7 +494,8 @@ function modificarPedido(callback) {
     'id_estado': form.combo_estado.value,
     'id_empleado': form.combo_empleados.value,
   };
-  fetch('http://localhost:3000/api/pedidos', {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/pedidos' + query,  {
     method: 'PUT',
     body: JSON.stringify(pedido),
     headers: {'content-type': 'application/json'},
@@ -499,7 +513,8 @@ function modificarPedido(callback) {
 function listaDeCLientes(filter, callback) {
   var table = $('#tablaClienteCuerpo');
   table.html('');
-  fetch('http://localhost:3000/api/clientes', {
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/clientes' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -539,9 +554,23 @@ function reporte1() {
                       date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-01`;
   const finMes =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
               date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${ultimoDia}`;
-  fetch('http://localhost:3000/api/pedidos?filter={"where": {"or": [{"id_estado": 2},{"id_estado": 3}],"and" :[{"fecha": {gte: "$(#inicioMes)" }}},{"fecha": {gte: "$(ultimoDia)"}}}]"include":[{ "relation": "estado_pedido"} ]}}');
-}// generar reporte mensulaes de importes de trabajos realizados y entregados
-
+  fetch('http://localhost:3000/api/pedidos?filter={"where": {"or": [{"id_estado": 2},{"id_estado": 3}],"and" :[{"fecha": {gte: "$(#inicioMes)" }}},{"fecha": {gte: "$(ultimoDia)"}}}]"include":[{ "relation": "estado_pedido"} ]}}', {
+    method: 'GET',
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error');
+    return response.json();
+  }).then(function(pedido) {
+    pedido.forEach(function(pedido) {
+      const suma = _.reduce(pedido, (acc, monto)=> {
+        return acc + pedido.monto;
+      }, 0);
+    });
+  }).catch(function(error) {
+    alert(error.message);
+  });// generar reporte mensulaes de importes de trabajos realizados y entregados
+}
 function reporte2() {
   const date = new Date();
   fetch('http://localhost:3000/api/pedidos?filter={"where": {"=": [{"fecha":{ "Date()"}}], "and": [{"id_estado":2}]}}');

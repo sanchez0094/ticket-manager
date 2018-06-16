@@ -5,7 +5,7 @@ function validacion() {
     method: 'POST',
     body: JSON.stringify({
       email: $('#email').val(),
-      password: $('#password'),
+      password: $('#password').val(),
     }),
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -14,7 +14,7 @@ function validacion() {
     return response.json();
   }).then(function(session) {
     localStorage.setItem('session', JSON.stringify(session));
-    window.location = '/pedidos.html';
+    window.location = 'pedidos.html';
   }).catch(function(error) {
     alert('Usuario o contraseña incorrectas.');
   });
