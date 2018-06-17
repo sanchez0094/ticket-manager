@@ -576,7 +576,8 @@ function reporte1() {
                       date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-01`;
   const finMes =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
     date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${ultimoDia.getDate()}`;
-  let query = getAuthorizedQuery('filter={"where": {"and": [{"fecha_pedido": {"gte": "' + inicioMes + '" }},{"fecha_pedido": {"lte": "' + finMes + '"}},{"or": [{"id_estado": 2},{"id_estado": 3}]}]}}');
+  let query = getAuthorizedQuery('filter={"where":{"or": [{"id_estado": 2},{"id_estado": 3}]}}');
+  //let query = getAuthorizedQuery('filter={"where": {"and": [{"fecha_pedido": {"gte": "' + inicioMes + '" }},{"fecha_pedido": {"lte": "' + finMes + '"}},{"or": [{"id_estado": 2},{"id_estado": 3}]}]}}');
   fetch('http://localhost:3000/api/pedidos' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
@@ -589,7 +590,11 @@ function reporte1() {
       const resultado = acc + pedido.monto;
       return resultado;
     }, 0);
+    const agrupado =  _.groupBy(datos, (pedido) => {
+      return new Date(pedido.fecha_pedido).getMonth();
+    });
     console.log('$' + suma);
+    console.log(agrupado);
   }).catch(function(error) {
     alert(error.message);
   });// generar reporte mensulaes de importes de trabajos realizados y entregados
