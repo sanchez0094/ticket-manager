@@ -391,9 +391,7 @@ function modificarEmpleado(callback) {
 function listarPedidos(filter, callback) {
   var table = $('#tablaPedidosCuerpo');
   table.html('');
-  const query = getAuthorizedQuery(`filter={"include":[
-    { "relation": "cliente"},{"relation": "estado"}
-  ]}`);
+  let query = getAuthorizedQuery('filter={"include":[{ "relation": "cliente"},{"relation": "estado"}]}');
   fetch('http://localhost:3000/api/pedidos' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
@@ -429,7 +427,7 @@ function idPedido() {
 var iid;
 function mostrarPedido(id, callback) {
   iid = id;
-  let query = getAuthorizedQuery('?filter={"include":[{ "relation": "cliente"}]}');
+  let query = getAuthorizedQuery('filter={"include":[{ "relation": "cliente"}]}');
   fetch('http://localhost:3000/api/pedidos/' + id + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
@@ -450,8 +448,7 @@ function mostrarPedido(id, callback) {
     $('#seña').val(pedido.seña);
     $('#saldoRestante').val(pedido.saldo);
     document.getElementById('pago_efectuado').checked = pedido.pago_efectuado;
-    document.getElementById('cuenta_corriente').checked =
-    pedido.cuenta_corriente;
+    document.getElementById('cuenta_corriente').checked = pedido.cuenta_corriente;
     if (pedido.id_prioridad == PRIORIDAD_ALTA)
       document.getElementById('alta').checked = true;
     if (pedido.id_prioridad == PRIORIDAD_MEDIA)
@@ -625,7 +622,7 @@ date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
   });
 }// generar reporte diario de trabajos pendientes
 function reporte3() {
-  var table = $('#tablaReportesCuerpo');
+  var table = $('#tablaReportesCuerpo2');
   table.html('');
   const date = new Date();
   const hoy =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
