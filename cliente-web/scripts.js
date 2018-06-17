@@ -250,7 +250,6 @@ function saldo() {
 
 function nuevoPedido(callback) {
   var form = document.getElementById('form-pedido');
-  console.log(form);
   const pedido = {
     'fecha_pedido': form.fecha_pedido.value,
     'fecha_entrega_estipulada': form.fecha_entrega.value,
@@ -545,7 +544,33 @@ function listaDeCLientes(filter, callback) {
   });
 }
 function reporte() {
-  fetch('http://localhost:3000/api/pedidos?filter={"where": {"or": [{"fecha":{ "Date()"}}]}}');
+  const date = new Date();
+  const hoy =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
+date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
+let query = getAuthorizedQuery('filter={"where":{"fecha_pedido": "' + hoy + '"}}');
+  fetch('http://localhost:3000/api/pedidos' + query, {
+    method: 'GET',
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error');
+    return response.json();
+  }).then(function(datos) {
+    const suma = _.reduce(datos, (acc, pedido)=> {
+      const resultado = acc + pedido.seña;
+      return resultado;
+    }, 0);
+    const mapeado = _.map(datos, (pedido)=> {
+      return {
+        valor: pedido.seña,
+        total: suma,
+      };
+    });
+    console.log('$' + suma);
+    console.log(mapeado);
+  }).catch(function(error) {
+    alert(error.message);
+  });
 } // generar reporte diario de importe total de señas
 function reporte1() {
   const date = new Date();
@@ -553,29 +578,76 @@ function reporte1() {
   const inicioMes =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
                       date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-01`;
   const finMes =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
-              date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${ultimoDia}`;
-  fetch('http://localhost:3000/api/pedidos?filter={"where": {"or": [{"id_estado": 2},{"id_estado": 3}],"and" :[{"fecha": {gte: "$(#inicioMes)" }}},{"fecha": {gte: "$(ultimoDia)"}}}]"include":[{ "relation": "estado_pedido"} ]}}', {
+    date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${ultimoDia.getDate()}`;
+  let query = getAuthorizedQuery('filter={"where": {"and": [{"fecha_pedido": {"gte": "' + inicioMes + '" }},{"fecha_pedido": {"lte": "' + finMes + '"}},{"or": [{"id_estado": 2},{"id_estado": 3}]}]}}');
+  fetch('http://localhost:3000/api/pedidos' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
       throw new Error('Error');
     return response.json();
-  }).then(function(pedido) {
-    pedido.forEach(function(pedido) {
-      const suma = _.reduce(pedido, (acc, monto)=> {
-        return acc + pedido.monto;
-      }, 0);
-    });
+  }).then(function(datos) {
+    const suma = _.reduce(datos, (acc, pedido)=> {
+      const resultado = acc + pedido.monto;
+      return resultado;
+    }, 0);
+    console.log('$' + suma);
   }).catch(function(error) {
     alert(error.message);
   });// generar reporte mensulaes de importes de trabajos realizados y entregados
 }
 function reporte2() {
+  var table = $('#tablaReportesCuerpo');
+  table.html('');
   const date = new Date();
-  fetch('http://localhost:3000/api/pedidos?filter={"where": {"=": [{"fecha":{ "Date()"}}], "and": [{"id_estado":2}]}}');
+  const hoy =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
+date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
+  let query = getAuthorizedQuery('filter={"include":[{"relation": "cliente"},{"relation": "estado"}],"where":{"and": [{"fecha_pedido": "' + hoy + '"},{"id_estado":2}]}}');
+  fetch('http://localhost:3000/api/pedidos' + query, {
+    method: 'GET',
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error');
+    return response.json();
+  }).then(function(datos) {
+    datos.forEach(function(pedido) {
+      table.append(`<tr>
+        <td>${pedido.cliente.nombre_cliente}
+        ${pedido.cliente.apellido_cliente} </td>
+        <td>${pedido.fecha_pedido.split('T')[0]}</td>
+        <td>${pedido.estado.nombre_estado}</td>
+        </tr> `);
+    });
+  }).catch(function(error) {
+    alert(error.message);
+  });
 }// generar reporte diario de trabajos pendientes
 function reporte3() {
+  var table = $('#tablaReportesCuerpo');
+  table.html('');
   const date = new Date();
-  fetch('http://localhost:3000/api/pedidos?filter={"where": {"=": [{"fecha":{ "Date()"}}], "and": [{"id_estado":3}]}}');
-} // generar reporte diario de trabajos realizados
+  const hoy =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
+date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
+  let query = getAuthorizedQuery('filter={"include":[{"relation": "cliente"},{"relation": "estado"}],"where":{"and": [{"fecha_pedido": "' + hoy + '"},{"id_estado":3}]}}');
+  fetch('http://localhost:3000/api/pedidos' + query, {
+    method: 'GET',
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error');
+    return response.json();
+  }).then(function(datos) {
+    datos.forEach(function(pedido) {
+      table.append(`<tr>
+        <td>${pedido.cliente.nombre_cliente}
+        ${pedido.cliente.apellido_cliente} </td>
+        <td>${pedido.fecha_pedido.split('T')[0]}</td>
+        <td>${pedido.estado.nombre_estado}</td>
+        </tr> `);
+    });
+  }).catch(function(error) {
+    alert(error.message);
+  });
+}// generar reporte diario de trabajos realizados
