@@ -33,6 +33,12 @@
 
   <div class="row" style="margin-top:20px">
     <div class="col s2"></div>
+<form id="pie">
+  <div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+</form>
+<form id="bar">
+  <div id="container2" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</form>
   <!--  <table id="tablaPedidos" >
     <thead>
      <tr>
@@ -49,19 +55,23 @@
   </table> -->
   <a id="btn_cargar" class="waves-effect waves-light btn ">Pedidos realizados</a>
     <div class="col s2"></div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.core.js"></script>
+
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/data.js"></script>
+  <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.js"></script>
   <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
   <script src="scripts.js"></script>
   <script type="text/javascript">
 
-  $(document).ready(function(){
-    $("#btn_cargar").click(function(){
-    reporte1();
+  $("#pie").ready(function(){
+   reporte();
     });
-    $("#btn_cargar2").click(function(){
-        reporte3();
+    $("#bar").ready(function(){
+     reporte1();
       });
-    });
   </script>
 </body>
 </html>

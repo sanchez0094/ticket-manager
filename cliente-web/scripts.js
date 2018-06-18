@@ -1,4 +1,4 @@
-/* global _,$ , fetch, document, M, alert, options, location, localStorage */
+/* global _,$ , fetch, document, M, alert, options, location, localStorage, Highcharts */
 'use strict';
 const PRIORIDAD_BAJA = 6;
 const PRIORIDAD_ALTA = 5;
@@ -553,22 +553,71 @@ let query = getAuthorizedQuery('filter={"where":{"fecha_pedido": "' + hoy + '"}}
       throw new Error('Error');
     return response.json();
   }).then(function(datos) {
-    const suma = _.reduce(datos, (acc, pedido)=> {
+    const sumaSenia = _.reduce(datos, (acc, pedido)=> {
       const resultado = acc + pedido.seña;
       return resultado;
     }, 0);
-    const mapeado = _.map(datos, (pedido)=> {
-      return {
-        valor: pedido.seña,
-        total: suma,
-      };
+    const sumaMonto = _.reduce(datos, (acc, pedido)=> {
+      const resultado = acc + pedido.monto;
+      return resultado;
+    }, 0);
+    var montoDeudor = sumaMonto - sumaSenia;
+    Highcharts.setOptions({
+      colors: Highcharts.map(Highcharts.getOptions().colors, function(color) {
+        return {
+          radialGradient: {
+            cx: 0.5,
+            cy: 0.3,
+            r: 0.7
+          },
+          stops: [
+                [0, color],
+                [1, Highcharts.Color(color).brighten(-0.3).get('rgb')]
+          ],
+        };
+      }),
     });
-    console.log('$' + suma);
-    console.log(mapeado);
+    Highcharts.chart('container', {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+      },
+      title: {
+        text: 'Señas totales del dia' + ' ' + hoy
+      },
+      tooltip: {
+        pointFormat: '{series.name}: <b>${point.y:.2f}</b>'
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: ${point.y:.2f}',
+            style: {
+              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+            },
+            connectorColor: 'silver'
+          },
+        },
+      },
+      series: [{
+        name: 'Share',
+        data: [
+            {name: 'Seña', y: sumaSenia},
+            {name: 'Facturacion', y: montoDeudor}
+        ]
+      }],
+    });
   }).catch(function(error) {
     alert(error.message);
   });
 } // generar reporte diario de importe total de señas
+var arrayMes = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
 function reporte1() {
   const date = new Date();
   const ultimoDia = new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -593,8 +642,57 @@ function reporte1() {
     const agrupado =  _.groupBy(datos, (pedido) => {
       return new Date(pedido.fecha_pedido).getMonth();
     });
-    console.log('$' + suma);
-    console.log(agrupado);
+    const mapeado = _.map(agrupado, (mensual) => {
+      let total = _.reduce(mensual, (acc, pedido) => {
+        return acc + pedido.monto;
+      }, 0);
+      var etiquetaMes = new Date(mensual[0].fecha_pedido);
+      var baseName = arrayMes[etiquetaMes.getMonth()] +
+                     ' ' + etiquetaMes.getFullYear();
+      return {
+        y: total,
+        name: baseName,
+      };
+    });
+    Highcharts.chart('container', {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Total Mensual de Trabajos Entregados y Realizados'
+      },
+      subtitle: {
+        text: ''
+      },
+      xAxis: {
+        type: 'category'
+      },
+      yAxis: {
+        title: {
+          text: 'Montos Totales'
+        },
+
+      },
+      legend: {
+        enabled: false
+      },
+      plotOptions: {
+        series: {
+          borderWidth: 0,
+          dataLabels: {
+            enabled: true,
+            format: '${point.y:.1f}'
+          },
+        },
+      },
+      'series': [
+        {
+          'name': 'Total $',
+          'colorByPoint': true,
+          'data': mapeado
+        },
+      ],
+    });
   }).catch(function(error) {
     alert(error.message);
   });// generar reporte mensulaes de importes de trabajos realizados y entregados
@@ -620,6 +718,7 @@ date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
         ${pedido.cliente.apellido_cliente} </td>
         <td>${pedido.fecha_pedido.split('T')[0]}</td>
         <td>${pedido.estado.nombre_estado}</td>
+        <td>${pedido.detalle_pedido}</td>
         </tr> `);
     });
   }).catch(function(error) {
@@ -647,6 +746,7 @@ date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
         ${pedido.cliente.apellido_cliente} </td>
         <td>${pedido.fecha_pedido.split('T')[0]}</td>
         <td>${pedido.estado.nombre_estado}</td>
+        <td>${pedido.detalle_pedido}</td>
         </tr> `);
     });
   }).catch(function(error) {

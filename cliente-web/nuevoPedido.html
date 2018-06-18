@@ -203,8 +203,14 @@
   $("#btn_cargar").click(function(){
       nuevoPedido();
     });
-
-
+    $( "#monto" ).keyup(function() {
+      const total = saldo();
+      $('#saldoRestante').val(total);
+    });
+    $( "#seña" ).keyup(function() {
+      const total = saldo();
+      $('#saldoRestante').val(total);
+    });
     listarEmpleados();
     listarClientes();
     listarNegocios();
