@@ -123,12 +123,12 @@
          <div class="col s4">
           Saldo: $
            <div class="input-field inline">
-             <input id="saldoRestante" type="number" class="validate">
+             <input id="saldoRestante" type="number" disabled="false" class="validate">
            </div>
            </div>
           </div>
           <a id="btn_cargar" class="waves-effect waves-light btn ">Cargar</a>
-
+          <a href="pedidos.html" class="waves-effect waves-light btn ">Volver</a>
 
   </form>
 
@@ -154,6 +154,14 @@ mostrarPedido(pedido.id, function(error, pedido){
    });
    $("#btn_cargar").click(function(){
        modificarPedido();
+     });
+     $( "#monto" ).keyup(function() {
+       const total = saldo();
+       $('#saldoRestante').val(total);
+     });
+     $( "#seña" ).keyup(function() {
+       const total = saldo();
+       $('#saldoRestante').val(total);
      });
 
    </script>

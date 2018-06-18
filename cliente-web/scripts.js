@@ -731,7 +731,7 @@ function reporte3() {
   const date = new Date();
   const hoy =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
 date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
-  let query = getAuthorizedQuery('filter={"include":[{"relation": "cliente"},{"relation": "estado"}],"where":{"and": [{"fecha_pedido": "' + hoy + '"},{"id_estado":3}]}}');
+  let query = getAuthorizedQuery('filter={"include":[{"relation": "cliente"},{"relation": "estado"}],"where":{"and": [{"fecha_pedido": "' + hoy + '"},{"id_estado":6}]}}');
   fetch('http://localhost:3000/api/pedidos' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
@@ -753,3 +753,24 @@ date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
     alert(error.message);
   });
 }// generar reporte diario de trabajos realizados
+function idCliente() {
+  return iid;
+}
+function eliminarClienta(id, callback) {
+  iid = id;
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/clientes' + id, query, {
+    method: 'DELETE',
+    body: JSON.stringify(cliente),
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error registrando empleado');
+    else
+      alert('Se elimino');
+    if (callback) callback();
+  }).catch(function(error) {
+    alert(error.message);
+    if (callback) callback(error);
+  });
+}
