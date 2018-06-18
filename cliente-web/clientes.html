@@ -22,7 +22,7 @@
     <div class="nav-wrapper container">
       <a id="logo-container" href="#" class="brand-logo">Ticket Manager</a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <a href="login.html" class="waves-effect waves-light btn ">Cerrar Secion</a>
+        <a href="login.html" class="waves-effect waves-light btn ">Cerrar Sesión</a>
         <li><a href="pedidos.html">Pedidos</a></li>
         <li><a href="clientes.html">Clientes</a></li>
         <li><a href="empleado.html">Empleados</a></li>
@@ -48,12 +48,12 @@
         <table id="tablaClientes">
        <thead>
          <tr>
-             <th>Nombre</th>
-             <th>Apellido</th>
-             <th>Cuit</th>
-             <th>Mail</th>
-              <th>Telefono</th>
-               <th>Dureccion</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Cuit</th>
+            <th>Mail</th>
+            <th>Telefono</th>
+            <th>Dureccion</th>
          </tr>
        </thead>
 
@@ -75,7 +75,9 @@
       $('#search-cliente').keyup(function(){
         listaDeCLientes($('#search-cliente').val());
       })
-
+      $("#btn_eliminar").click(function(){
+        eliminarCliente();
+      });
    });
    </script>
  </body>

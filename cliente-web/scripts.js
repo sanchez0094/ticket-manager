@@ -654,7 +654,7 @@ function reporte1() {
         name: baseName,
       };
     });
-    Highcharts.chart('container', {
+    Highcharts.chart('container2', {
       chart: {
         type: 'column'
       },
@@ -697,8 +697,8 @@ function reporte1() {
     alert(error.message);
   });// generar reporte mensulaes de importes de trabajos realizados y entregados
 }
-function reporte2() {
-  var table = $('#tablaReportesCuerpo');
+function reportePendientes() {
+  var table = $('#tablaReportesPendientes');
   table.html('');
   const date = new Date();
   const hoy =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
@@ -725,8 +725,8 @@ date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
     alert(error.message);
   });
 }// generar reporte diario de trabajos pendientes
-function reporte3() {
-  var table = $('#tablaReportesCuerpo2');
+function reporteRealizados() {
+  var table = $('#tablaReportesCuerpoRealizados');
   table.html('');
   const date = new Date();
   const hoy =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
@@ -753,24 +753,3 @@ date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
     alert(error.message);
   });
 }// generar reporte diario de trabajos realizados
-function idCliente() {
-  return iid;
-}
-function eliminarClienta(id, callback) {
-  iid = id;
-  let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/clientes' + id, query, {
-    method: 'DELETE',
-    body: JSON.stringify(cliente),
-    headers: {'content-type': 'application/json'},
-  }).then(function(response) {
-    if (response.status != 200)
-      throw new Error('Error registrando empleado');
-    else
-      alert('Se elimino');
-    if (callback) callback();
-  }).catch(function(error) {
-    alert(error.message);
-    if (callback) callback(error);
-  });
-}
