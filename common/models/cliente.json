@@ -24,6 +24,9 @@
     },
     "email":{
       "type":"string"
+    },
+    "estado":{
+    "type":"boolean"
     }
   },
   "acls": [{

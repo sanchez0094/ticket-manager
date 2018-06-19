@@ -54,6 +54,7 @@
             <th>Mail</th>
             <th>Telefono</th>
             <th>Dureccion</th>
+            <th>Eliminar</th>
          </tr>
        </thead>
 
@@ -74,10 +75,11 @@
       listaDeCLientes();
       $('#search-cliente').keyup(function(){
         listaDeCLientes($('#search-cliente').val());
-      })
-      $("#btn_eliminar").click(function(){
-        eliminarCliente();
       });
+
+
+
+
    });
    </script>
  </body>

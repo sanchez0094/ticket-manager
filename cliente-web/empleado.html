@@ -88,6 +88,7 @@
           <input  id="email" type="text" class="validate">
           <label for="email">E-mail</label>
         </div>
+        <input type="hidden" value= "" id= "id_empleado_quitar">
       </div>
 
   </form>
@@ -103,10 +104,16 @@
     empleados();
     });
     $("#account_circle-btn").click(function(){
-nuevoEmpleado();
+      nuevoEmpleado();
+      location.href= "empleado.html";
     });
     $("#mode_edit-btn").click(function(){
       modificarEmpleado();
+      location.href= "empleado.html";
+    });
+    $("#mode_delete-btn").click(function(){
+      quitarEmpleado();
+      location.href= "empleado.html";
     });
 
   traerEmpleado();

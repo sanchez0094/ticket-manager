@@ -52,7 +52,7 @@ function mostrarCliente() {
 }
 
 function listarClientes(callback) {
-  let query = getAuthorizedQuery();
+  let query = getAuthorizedQuery('filter={"where":{"estado": true}}');
   fetch('http://localhost:3000/api/clientes' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
@@ -79,7 +79,7 @@ function listarClientes(callback) {
 }
 
 function listarEmpleados(selectedId) {
-  let query = getAuthorizedQuery();
+  let query = getAuthorizedQuery('filter={"where":{"estado": true}}');
   fetch('http://localhost:3000/api/empleados' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
@@ -138,6 +138,7 @@ function nuevoCliente(callback) {
     'telefono': form.telefono.value,
     'email': form.email.value,
     'direccion': form.direccion.value,
+    'estado': true,
   };
   let query = getAuthorizedQuery();
   fetch('http://localhost:3000/api/clientes' + query, {
@@ -166,6 +167,7 @@ function modificarCliente(callback) {
     'telefono': form.telefono.value,
     'direccion': form.direccion.value,
     'email': form.email.value,
+    'estado': true,
   };
   let query = getAuthorizedQuery();
   fetch('http://localhost:3000/api/clientes' + query, {
@@ -307,7 +309,7 @@ function empleados() {
 }
 
 function traerEmpleado(callback) {
-  let query = getAuthorizedQuery();
+  let query = getAuthorizedQuery('filter={"where":{"estado": true}}');
   fetch('http://localhost:3000/api/empleados' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
@@ -343,6 +345,7 @@ function nuevoEmpleado(callback) {
     'telefono': form.telefono.value,
     'email': form.email.value,
     'direccion': form.direccion.value,
+    'estado': true,
   };
   let query = getAuthorizedQuery();
   fetch('http://localhost:3000/api/empleados' + query, {
@@ -356,7 +359,7 @@ function nuevoEmpleado(callback) {
       alert('Se cargo');
     if (callback) callback();
   }).catch(function(error) {
-    alert(error.message);
+    // alert(error.message);
     if (callback) callback(error);
   });
 }
@@ -371,6 +374,7 @@ function modificarEmpleado(callback) {
     'telefono': form.telefono.value,
     'email': form.email.value,
     'direccion': form.direccion.value,
+    'estado': true,
   };
   let query = getAuthorizedQuery();
   fetch('http://localhost:3000/api/empleados' + query, {
@@ -384,7 +388,7 @@ function modificarEmpleado(callback) {
       alert('Se cargo');
     if (callback) callback();
   }).catch(function(error) {
-    alert(error.message);
+    // alert(error.message);
     if (callback) callback(error);
   });
 }
@@ -404,13 +408,24 @@ function listarPedidos(filter, callback) {
       let match = new RegExp(filter);
       if (match.test(pedido.cliente.nombre_cliente) ||
       match.test(pedido.cliente.apellido_cliente) || !filter) {
-        table.append(`<tr>
-          <td>${pedido.cliente.nombre_cliente}
-          ${pedido.cliente.apellido_cliente} </td>
-          <td>${pedido.fecha_pedido.split('T')[0]}</td>
-          <td>${pedido.estado.nombre_estado}</td>
-          <td><a href="pedido.html?id=${pedido.id_pedido}">editar</a></td>
-          </tr> `);
+        table.append(`<tr class="fila">
+    <td class="idPedido" style="display:none">${pedido.id_pedido}</td>
+    <td class="nombre">${pedido.cliente.nombre_cliente}
+    ${pedido.cliente.apellido_cliente} </td>
+    <td class="fecha_pedido">${pedido.fecha_pedido.split('T')[0]}</td>
+    <td class="nombre_estado">${pedido.estado.nombre_estado}</td>
+    <td class="estado" style="display:none">${pedido.id_estado}</td>
+    <td><a class="editar" href="pedido.html?id=${pedido.id_pedido}">editar</a></td>
+    </tr> `);
+        var fila = document.getElementsByClassName('fila');
+        var estado = document.getElementsByClassName('estado');
+        var editar = document.getElementsByClassName('editar');
+
+        for (var i = 0; i < fila.length; i++) {
+          if (estado[i].textContent == 5) {
+            fila[i].style = 'background-color:LightSlateGrey;color:white;';
+          }
+        }
       }
     });
     if (callback)
@@ -522,14 +537,28 @@ function listaDeCLientes(filter, callback) {
       let match = new RegExp(filter);
       if (match.test(cliente.nombre_cliente) ||
       match.test(cliente.apellido_cliente) || !filter) {
-        table.append(`<tr>
-          <td>${cliente.nombre_cliente}</td>
-          <td>${cliente.apellido_cliente}</td>
-          <td>${cliente.cuit}</td>
-          <td>${cliente.email}</td>
-          <td>${cliente.telefono}</td>
-          <td>${cliente.direccion}</td>
+        table.append(`<tr class="fila">
+          <td class="idCliente" style="display:none">${cliente.id_cliente}</td>
+          <td class="nombre">${cliente.nombre_cliente}</td>
+          <td class="apellido">${cliente.apellido_cliente}</td>
+          <td class="cuit">${cliente.cuit}</td>
+          <td class="email">${cliente.email}</td>
+          <td class="telefono">${cliente.telefono}</td>
+          <td class="direccion">${cliente.direccion}</td>
+          <td class="estado" style="display:none">${cliente.estado}</td>
+          <td ><a href="javascript:quitarCliente(${cliente.id_cliente});">eliminar</a></td>
+
+
           </tr> `);
+
+        var fila = document.getElementsByClassName('fila');
+        var estado = document.getElementsByClassName('estado');
+
+        for (var i = 0; i < fila.length; i++) {
+          if (estado[i].textContent == 'false') {
+            fila[i].style = 'background-color:LightSlateGrey;color:white;';
+          }
+        }
       }
     });
     if (callback)
@@ -753,3 +782,74 @@ date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
     alert(error.message);
   });
 }// generar reporte diario de trabajos realizados
+
+function quitarEmpleado(callback) {
+  var form = document.getElementById('form-cargaE');
+  console.log(form);
+  const empleado = {
+    'id_empleado': obtenerIDEmpleados(),
+    'apellido_empleado': form.apellido_empleado.value,
+    'nombre_empleado': form.nombre_empleado.value,
+    'cuil': form.cuil.value,
+    'telefono': form.telefono.value,
+    'email': form.email.value,
+    'direccion': form.direccion.value,
+    'estado': false,
+  };
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/empleados' + query, {
+    method: 'PUT',
+    body: JSON.stringify(empleado),
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error modificando empleado');
+    else
+      alert('Se cargo');
+    if (callback) callback();
+  }).catch(function(error) {
+    if (callback) callback(error);
+  });
+}
+function quitarCliente(idCliente) {
+  var fila = document.getElementsByClassName('fila');
+  var idClienteA = document.getElementsByClassName('idCliente');
+  var nombre = document.getElementsByClassName('nombre');
+  var apellido = document.getElementsByClassName('apellido');
+  var cuit = document.getElementsByClassName('cuit');
+  var email = document.getElementsByClassName('email');
+  var telefono = document.getElementsByClassName('telefono');
+  var direccion = document.getElementsByClassName('direccion');
+  var cliente = null;
+  for (var i = 0; i < fila.length; i++) {
+    if (idClienteA[i].textContent == idCliente) {
+      cliente = {
+        'id_cliente': idClienteA[i].textContent,
+        'apellido_cliente': apellido[i].textContent,
+        'nombre_cliente': nombre[i].textContent,
+        'cuit': cuit[i].textContent,
+        'telefono': telefono[i].textContent,
+        'email': email[i].textContent,
+        'direccion': direccion[i].textContent,
+        'estado': false,
+      };
+      break;
+    }
+  }
+  let query = getAuthorizedQuery();
+  fetch('http://localhost:3000/api/clientes' + query, {
+    method: 'PUT',
+    body: JSON.stringify(cliente),
+    headers: {'content-type': 'application/json'},
+  }).then(function(response) {
+    if (response.status != 200)
+      throw new Error('Error');
+    else
+      alert('Se cargo');
+    location.href = 'clientes.html';
+  //  if (callback) callback();
+  }).catch(function(error) {
+    // alert(error.message);
+  //  if (callback) callback(error);
+  });
+}
