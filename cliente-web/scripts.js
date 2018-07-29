@@ -654,7 +654,7 @@ function reporte1() {
                       date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-01`;
   const finMes =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
     date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${ultimoDia.getDate()}`;
-  let query = getAuthorizedQuery('filter={"where":{"or": [{"id_estado": 2},{"id_estado": 3}]}}');
+  let query = getAuthorizedQuery('filter={"where":{"or": [{"id_estado": 4},{"id_estado": 6}]}}');
   //let query = getAuthorizedQuery('filter={"where": {"and": [{"fecha_pedido": {"gte": "' + inicioMes + '" }},{"fecha_pedido": {"lte": "' + finMes + '"}},{"or": [{"id_estado": 2},{"id_estado": 3}]}]}}');
   fetch('http://localhost:3000/api/pedidos' + query, {
     method: 'GET',
@@ -803,9 +803,9 @@ function quitarEmpleado(callback) {
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
     if (response.status != 200)
-      throw new Error('Error modificando empleado');
+      throw new Error('Error eliminando empleado');
     else
-      alert('Se cargo');
+      alert('Se ELIMINO correctamente');
     if (callback) callback();
   }).catch(function(error) {
     if (callback) callback(error);
@@ -845,7 +845,7 @@ function quitarCliente(idCliente) {
     if (response.status != 200)
       throw new Error('Error');
     else
-      alert('Se cargo');
+      alert('Se ELIMINO correctamente');
     location.href = 'clientes.html';
   //  if (callback) callback();
   }).catch(function(error) {
