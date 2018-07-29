@@ -1,0 +1,40 @@
+version: '2'
+services:
+#About node_modules.
+#By default I override local node_modules directory.
+#This is intended for working without installing dependencies by using development images.
+
+  ticket-manager:
+    image: quay.io/sanchez0094/ticket-manager
+    container_name: ticket-manager
+    ports:
+      - "8080:3000"
+    networks:
+      - am
+    environment:
+      - 'NODE_ENV=development'
+    restart: always
+    #Logging
+    logging:
+        driver: json-file
+        options:
+            max-size: "50m"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql/mysql-server:5.7.22
+    container_name: mysql
+    restart: always
+    environment:
+        - 'MYSQL_DATABASE=ticket-manager'
+        - 'MYSQL_USER=root'
+        - 'MYSQL_PASSWORD=root'
+    ports:
+      - "3306:3306"
+    networks:
+      - am
+
+networks:
+ am:
+     driver: bridge
