@@ -30,7 +30,7 @@ function obtenerIDEmpleados() {
 function mostrarCliente() {
   var userId = obtenerIDCLiente();
   let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/clientes/' + userId + query, {
+  fetch('/api/clientes/' + userId + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -53,7 +53,7 @@ function mostrarCliente() {
 
 function listarClientes(callback) {
   let query = getAuthorizedQuery('filter={"where":{"estado": true}}');
-  fetch('http://localhost:3000/api/clientes' + query, {
+  fetch('/api/clientes' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -80,7 +80,7 @@ function listarClientes(callback) {
 
 function listarEmpleados(selectedId) {
   let query = getAuthorizedQuery('filter={"where":{"estado": true}}');
-  fetch('http://localhost:3000/api/empleados' + query, {
+  fetch('/api/empleados' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -104,7 +104,7 @@ function listarEmpleados(selectedId) {
 }
 function listarNegocios(selectedId) {
   let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/negocios' + query, {
+  fetch('/api/negocios' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -141,7 +141,7 @@ function nuevoCliente(callback) {
     'estado': true,
   };
   let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/clientes' + query, {
+  fetch('/api/clientes' + query, {
     method: 'POST',
     body: JSON.stringify(cliente),
     headers: {'content-type': 'application/json'},
@@ -170,7 +170,7 @@ function modificarCliente(callback) {
     'estado': true,
   };
   let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/clientes' + query, {
+  fetch('/api/clientes' + query, {
     method: 'PUT',
     body: JSON.stringify(cliente),
     headers: {'content-type': 'application/json'},
@@ -187,7 +187,7 @@ function modificarCliente(callback) {
 }
 function listarEstado(selectedId) {
   let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/estado_pedidos' + query, {
+  fetch('/api/estado_pedidos' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -268,7 +268,7 @@ function nuevoPedido(callback) {
     'id_empleado': form.combo_empleados.value,
   };
   let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/pedidos' + query, {
+  fetch('/api/pedidos' + query, {
     method: 'POST',
     body: JSON.stringify(pedido),
     headers: {'content-type': 'application/json'},
@@ -287,7 +287,7 @@ function nuevoPedido(callback) {
 function empleados() {
   var userId = obtenerIDEmpleados();
   let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/empleados/' + userId + query, {
+  fetch('/api/empleados/' + userId + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -310,7 +310,7 @@ function empleados() {
 
 function traerEmpleado(callback) {
   let query = getAuthorizedQuery('filter={"where":{"estado": true}}');
-  fetch('http://localhost:3000/api/empleados' + query, {
+  fetch('/api/empleados' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -348,7 +348,7 @@ function nuevoEmpleado(callback) {
     'estado': true,
   };
   let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/empleados' + query, {
+  fetch('/api/empleados' + query, {
     method: 'POST',
     body: JSON.stringify(empleado),
     headers: {'content-type': 'application/json'},
@@ -377,7 +377,7 @@ function modificarEmpleado(callback) {
     'estado': true,
   };
   let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/empleados' + query, {
+  fetch('/api/empleados' + query, {
     method: 'PUT',
     body: JSON.stringify(empleado),
     headers: {'content-type': 'application/json'},
@@ -396,7 +396,7 @@ function listarPedidos(filter, callback) {
   var table = $('#tablaPedidosCuerpo');
   table.html('');
   let query = getAuthorizedQuery('filter={"include":[{ "relation": "cliente"},{"relation": "estado"}]}');
-  fetch('http://localhost:3000/api/pedidos' + query, {
+  fetch('/api/pedidos' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -443,7 +443,7 @@ var iid;
 function mostrarPedido(id, callback) {
   iid = id;
   let query = getAuthorizedQuery('filter={"include":[{ "relation": "cliente"}]}');
-  fetch('http://localhost:3000/api/pedidos/' + id + query, {
+  fetch('/api/pedidos/' + id + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -506,7 +506,7 @@ function modificarPedido(callback) {
     'id_empleado': form.combo_empleados.value,
   };
   let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/pedidos' + query,  {
+  fetch('/api/pedidos' + query,  {
     method: 'PUT',
     body: JSON.stringify(pedido),
     headers: {'content-type': 'application/json'},
@@ -525,7 +525,7 @@ function listaDeCLientes(filter, callback) {
   var table = $('#tablaClienteCuerpo');
   table.html('');
   let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/clientes' + query, {
+  fetch('/api/clientes' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -574,7 +574,7 @@ function reporte() {
   const hoy =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
 date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
 let query = getAuthorizedQuery('filter={"where":{"fecha_pedido": "' + hoy + '"}}');
-  fetch('http://localhost:3000/api/pedidos' + query, {
+  fetch('/api/pedidos' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -656,7 +656,7 @@ function reporte1() {
     date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${ultimoDia.getDate()}`;
   let query = getAuthorizedQuery('filter={"where":{"or": [{"id_estado": 4},{"id_estado": 6}]}}');
   //let query = getAuthorizedQuery('filter={"where": {"and": [{"fecha_pedido": {"gte": "' + inicioMes + '" }},{"fecha_pedido": {"lte": "' + finMes + '"}},{"or": [{"id_estado": 2},{"id_estado": 3}]}]}}');
-  fetch('http://localhost:3000/api/pedidos' + query, {
+  fetch('/api/pedidos' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -733,7 +733,7 @@ function reportePendientes() {
   const hoy =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
 date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
   let query = getAuthorizedQuery('filter={"include":[{"relation": "cliente"},{"relation": "estado"}],"where":{"and": [{"fecha_pedido": "' + hoy + '"},{"id_estado":2}]}}');
-  fetch('http://localhost:3000/api/pedidos' + query, {
+  fetch('/api/pedidos' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -761,7 +761,7 @@ function reporteRealizados() {
   const hoy =  `${date.getFullYear()}-${date.getMonth().length > 1 ?
 date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getDate()}`;
   let query = getAuthorizedQuery('filter={"include":[{"relation": "cliente"},{"relation": "estado"}],"where":{"and": [{"fecha_pedido": "' + hoy + '"},{"id_estado":6}]}}');
-  fetch('http://localhost:3000/api/pedidos' + query, {
+  fetch('/api/pedidos' + query, {
     method: 'GET',
     headers: {'content-type': 'application/json'},
   }).then(function(response) {
@@ -797,7 +797,7 @@ function quitarEmpleado(callback) {
     'estado': false,
   };
   let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/empleados' + query, {
+  fetch('/api/empleados' + query, {
     method: 'PUT',
     body: JSON.stringify(empleado),
     headers: {'content-type': 'application/json'},
@@ -837,7 +837,7 @@ function quitarCliente(idCliente) {
     }
   }
   let query = getAuthorizedQuery();
-  fetch('http://localhost:3000/api/clientes' + query, {
+  fetch('/api/clientes' + query, {
     method: 'PUT',
     body: JSON.stringify(cliente),
     headers: {'content-type': 'application/json'},

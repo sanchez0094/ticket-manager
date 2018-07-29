@@ -1,0 +1,15 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "ticket-manager-db": {
+    "name": "ticket-manager-db",
+    "connector": "mysql",
+    "host": "mysql",
+    "port": 3306,
+    "database": "ticket-manager",
+    "password": "root",
+    "user": "root"
+   }
+}
