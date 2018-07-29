@@ -1,7 +1,7 @@
 /* global _,$ , fetch, document, alert, options, location, localStorage, window */
 'use strict';
 function validacion() {
-  fetch('http://localhost:3000/api/Users/login', {
+  fetch('/api/Users/login', {
     method: 'POST',
     body: JSON.stringify({
       email: $('#email').val(),
@@ -27,7 +27,7 @@ function loginNuevo(callback) {
     'email': form.email.value,
     'password': form.password.value,
   };
-  fetch('http://localhost:3000/api/Users', {
+  fetch('/api/Users', {
     method: 'POST',
     body: JSON.stringify(login),
     headers: {'content-type': 'application/json'},
